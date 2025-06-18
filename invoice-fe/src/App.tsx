@@ -14,11 +14,8 @@ import AboutPage from './app/about/page';
 const App = () => {
   return (
     <>
-      <Toaster position="top-right" />
-      <Routes>
-        <Route path="/" element={<RootLayout><HomePage /></RootLayout>} />
-        <Route path="/about" element={<RootLayout><AboutPage /></RootLayout>} />
-      </Routes>
+
+
     </>
   )
 };

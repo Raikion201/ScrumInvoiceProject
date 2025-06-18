@@ -92,6 +92,13 @@ const HomePage = () => {
                                 >
                                     Đăng nhập
                                 </Button>
+                                <Button
+                                    size="large"
+                                    onClick={() => router.push('/purchase-requests')}
+                                    style={{ background: 'rgba(255,255,255,0.2)', borderColor: 'white', color: 'white' }}
+                                >
+                                    Staff Portal
+                                </Button>
                             </Space>
                         </div>
                     </Col>

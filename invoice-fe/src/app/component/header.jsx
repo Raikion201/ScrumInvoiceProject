@@ -29,6 +29,10 @@ const Header = () => {
             label: 'Blog',
             key: '/blog',
         },
+        {
+            label: 'Staff Portal',
+            key: '/purchase-requests',
+        },
     ];
 
     return (
