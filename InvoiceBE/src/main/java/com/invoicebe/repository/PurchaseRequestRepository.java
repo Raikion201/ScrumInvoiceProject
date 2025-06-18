@@ -22,6 +22,7 @@ public interface PurchaseRequestRepository extends JpaRepository<PurchaseRequest
         @Param("isPaid") Boolean isPaid
     );
 }}
+}
 =======
 import com.invoicebe.model.PurchaseRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
