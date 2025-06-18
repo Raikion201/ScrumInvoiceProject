@@ -1,27 +1,3 @@
 {
-  "pages": {
-    "/page": [
-      "static/chunks/node_modules_next_dist_1a6ee436._.js",
-      "static/chunks/src_app_layout_jsx_c0237562._.js",
-      "static/chunks/node_modules_antd_es_0f83207d._.js",
-      "static/chunks/node_modules_@ant-design_icons_es_f8a81439._.js",
-      "static/chunks/node_modules_rc-field-form_es_4fb5d7cb._.js",
-      "static/chunks/node_modules_@ant-design_cssinjs_es_9dfc9f47._.js",
-      "static/chunks/node_modules_rc-tabs_es_eb5572a2._.js",
-      "static/chunks/node_modules_rc-menu_es_657c33d5._.js",
-      "static/chunks/node_modules_rc-select_es_b53f2576._.js",
-      "static/chunks/node_modules_@ant-design_2ffbf05d._.js",
-      "static/chunks/node_modules_@rc-component_b5680285._.js",
-      "static/chunks/node_modules_0f2e2f74._.js",
-      "static/chunks/src_app_page_jsx_cf0b9f96._.js",
-      "static/chunks/src_app_page_jsx_8d6d5d58._.js",
-      "static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_fd44f5a4._.js",
-      "static/chunks/node_modules_next_dist_compiled_2ce9398a._.js",
-      "static/chunks/node_modules_next_dist_client_8f19e6fb._.js",
-      "static/chunks/node_modules_next_dist_2ecbf5fa._.js",
-      "static/chunks/node_modules_@swc_helpers_cjs_00636ac3._.js",
-      "static/chunks/_e69f0d32._.js",
-      "static/chunks/_93808211._.js"
-    ]
-  }
+  "pages": {}
 }

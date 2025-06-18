@@ -1,108 +1,73 @@
+'use client'
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Menu, Button, Space, Dropdown, Avatar } from 'antd';
+import { useRouter } from 'next/navigation';
+import { Menu, Button, Space } from 'antd';
 import {
-    HomeOutlined,
-    BookOutlined,
-    MessageOutlined,
-    InfoCircleOutlined,
-    UserOutlined,
-    LogoutOutlined
+    FileTextOutlined,
+    DollarOutlined,
+    InfoCircleOutlined
 } from '@ant-design/icons';
-import useAuthStore from '../../store/authStore';
 
 const Header = () => {
-    const navigate = useNavigate();
-    const { user, logout } = useAuthStore();
+    const router = useRouter();
     const [current, setCurrent] = useState('home');
-
-    const handleLogout = () => {
-        logout();
-        navigate('/');
-    };
 
     const onClick = (e) => {
         setCurrent(e.key);
-        navigate(e.key);
+        router.push(e.key);
     };
 
     const items = [
         {
-            label: 'Home',
+            label: 'Trang chủ',
             key: '/',
-            icon: <HomeOutlined />,
+            icon: <FileTextOutlined />,
         },
         {
-            label: 'Recipes',
-            key: '/recipes',
-            icon: <BookOutlined />,
-        },
-        {
-            label: 'Chat',
-            key: '/chat',
-            icon: <MessageOutlined />,
-        },
-        {
-            label: 'About',
+            label: 'about',
             key: '/about',
+            icon: <DollarOutlined />,
+        },
+        {
+            label: 'contact',
+            key: '/contact',
             icon: <InfoCircleOutlined />,
         },
-    ];
-
-    const userMenuItems = [
         {
-            key: '/profile',
-            label: 'My Profile',
-            icon: <UserOutlined />,
-            onClick: () => navigate('/profile')
+            label: 'blog',
+            key: '/blog',
+            icon: <FileTextOutlined />,
         },
-        {
-            key: 'logout',
-            label: 'Logout',
-            icon: <LogoutOutlined />,
-            onClick: handleLogout
-        }
     ];
 
     return (
-        <div className="header" style={{ borderBottom: '1px solid #f0f0f0' }}>
-            <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 16px', display: 'flex', justifyContent: 'space-between' }}>
+        <div className="header" style={{ borderBottom: '1px solid #f0f0f0', background: '#fff' }}>
+            <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div className="logo" style={{ display: 'flex', alignItems: 'center' }}>
                     <h1
-                        style={{ margin: 0, cursor: 'pointer' }}
-                        onClick={() => navigate('/')}
+                        style={{ margin: 0, cursor: 'pointer', color: '#52c41a', fontWeight: 'bold', fontSize: 28 }}
+                        onClick={() => router.push('/')}
                     >
-                        <span style={{ color: '#52c41a', fontWeight: 'bold' }}>Cook'n'Chat</span>
+                        Invoice Purchase
                     </h1>
                 </div>
-
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                     <Menu
                         onClick={onClick}
                         selectedKeys={[current]}
                         mode="horizontal"
                         items={items}
-                        style={{ border: 'none' }}
+                        style={{ border: 'none', background: 'transparent' }}
                     />
-
                     <div style={{ marginLeft: 16 }}>
-                        {user ? (
-                            <Dropdown menu={{ items: userMenuItems }} placement="bottomRight">
-                                <Space>
-                                    <Avatar icon={<UserOutlined />} style={{ backgroundColor: '#52c41a' }} />
-                                    <span>{user.username}</span>
-                                </Space>
-                            </Dropdown>
-                        ) : (
-                            <Space>
-                                <Button type="text" onClick={() => navigate('/login')}>
-                                    Sign in
-                                </Button>
-                                <Button type="primary" onClick={() => navigate('/register')}>
-                                    Sign up
-                                </Button>
-                            </Space>
-                        )}
+                        <Space>
+                            <Button type="text" onClick={() => router.push('/login')}>
+                                Đăng nhập
+                            </Button>
+                            <Button type="primary" onClick={() => router.push('/register')}>
+                                Đăng ký
+                            </Button>
+                        </Space>
                     </div>
                 </div>
             </div>
