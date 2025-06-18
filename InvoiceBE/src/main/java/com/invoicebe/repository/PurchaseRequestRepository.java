@@ -1,5 +1,6 @@
 package com.invoicebe.repository;
 
+<<<<<<< Updated upstream
 import com.invoicebe.entity.PurchaseRequest;
 import com.invoicebe.entity.PurchaseRequest.Status;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -20,4 +21,11 @@ public interface PurchaseRequestRepository extends JpaRepository<PurchaseRequest
         @Param("endDueDate") LocalDate endDueDate,
         @Param("isPaid") Boolean isPaid
     );
+}}
+=======
+import com.invoicebe.model.PurchaseRequest;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface PurchaseRequestRepository extends JpaRepository<PurchaseRequest, Long> {
 }
+>>>>>>> Stashed changes
