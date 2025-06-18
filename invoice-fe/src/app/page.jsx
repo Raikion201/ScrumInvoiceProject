@@ -1,75 +1,56 @@
 'use client'
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import { Typography, Button, Row, Col, Card, Carousel, Image, Space, List } from 'antd';
+import { Typography, Button, Row, Col, Card, Image, Space, List } from 'antd';
 import {
-    FireOutlined,
-    MessageOutlined,
-    SearchOutlined,
-    HeartOutlined,
-    ArrowRightOutlined
+    FileTextOutlined,
+    DollarOutlined,
+    CloudUploadOutlined,
+    CheckCircleOutlined,
 } from '@ant-design/icons';
 
-const { Title, Paragraph, Text } = Typography;
+const { Title, Paragraph } = Typography;
 
-// Dữ liệu mẫu cho trang chủ
+// Dữ liệu mẫu cho các tính năng
 const features = [
     {
-        icon: <FireOutlined style={{ fontSize: '24px', color: '#ff4d4f' }} />,
-        title: 'Discover Recipes',
-        description: 'Find delicious recipes based on ingredients you already have at home.'
+        icon: <FileTextOutlined style={{ fontSize: '24px', color: '#1890ff' }} />,
+        title: 'Quản lý hóa đơn',
+        description: 'Lưu trữ, tìm kiếm và quản lý hóa đơn mua hàng một cách dễ dàng.'
     },
     {
-        icon: <MessageOutlined style={{ fontSize: '24px', color: '#52c41a' }} />,
-        title: 'Chat Interface',
-        description: 'Interact with our AI assistant to get personalized recipe recommendations.'
+        icon: <DollarOutlined style={{ fontSize: '24px', color: '#52c41a' }} />,
+        title: 'Theo dõi chi phí',
+        description: 'Tự động tổng hợp và phân tích chi phí mua sắm của bạn.'
     },
     {
-        icon: <SearchOutlined style={{ fontSize: '24px', color: '#1890ff' }} />,
-        title: 'Smart Search',
-        description: 'Search by ingredients, cuisine type, or dietary restrictions.'
+        icon: <CloudUploadOutlined style={{ fontSize: '24px', color: '#faad14' }} />,
+        title: 'Nhập hóa đơn nhanh',
+        description: 'Hỗ trợ nhập hóa đơn bằng file hoặc chụp ảnh.'
     },
     {
-        icon: <HeartOutlined style={{ fontSize: '24px', color: '#fa8c16' }} />,
-        title: 'Save Favorites',
-        description: 'Create a collection of your favorite recipes for quick access.'
+        icon: <CheckCircleOutlined style={{ fontSize: '24px', color: '#ff4d4f' }} />,
+        title: 'Báo cáo thông minh',
+        description: 'Tạo báo cáo chi tiết về hóa đơn và chi tiêu chỉ với một cú nhấp.'
     }
 ];
 
 const howItWorks = [
     {
-        title: 'Tell us what you have',
-        content: 'Input the ingredients you have in your kitchen through our chat interface.'
+        title: 'Đăng ký tài khoản',
+        content: 'Tạo tài khoản miễn phí để bắt đầu sử dụng Invoice Purchase.'
     },
     {
-        title: 'Get recipe suggestions',
-        content: 'Our AI will suggest recipes that match your available ingredients.'
+        title: 'Nhập hóa đơn',
+        content: 'Thêm hóa đơn mua hàng của bạn bằng cách tải file hoặc nhập tay.'
     },
     {
-        title: 'Cook and enjoy',
-        content: 'Follow the step-by-step instructions and enjoy your delicious meal.'
+        title: 'Quản lý & tra cứu',
+        content: 'Dễ dàng tìm kiếm, chỉnh sửa và quản lý hóa đơn mọi lúc mọi nơi.'
     },
     {
-        title: 'Share your experience',
-        content: 'Rate recipes and share your cooking experience with the community.'
-    }
-];
-
-const popularRecipes = [
-    {
-        title: 'Creamy Garlic Pasta',
-        description: 'A quick and delicious pasta dish with a creamy garlic sauce.',
-        imageUrl: 'https://images.unsplash.com/photo-1551183053-bf91a1d81141?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3'
-    },
-    {
-        title: 'Vegetable Stir Fry',
-        description: 'Healthy stir-fried vegetables with a flavorful sauce.',
-        imageUrl: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3'
-    },
-    {
-        title: 'Chocolate Chip Cookies',
-        description: 'Classic homemade cookies with chunks of chocolate.',
-        imageUrl: 'https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3'
+        title: 'Xem báo cáo',
+        content: 'Theo dõi chi tiêu và xuất báo cáo nhanh chóng, trực quan.'
     }
 ];
 
@@ -90,38 +71,26 @@ const HomePage = () => {
                     <Col xs={24} md={12}>
                         <div style={{ padding: '0 16px' }}>
                             <Title level={1} style={{ color: 'white', marginBottom: 16 }}>
-                                Cook Smart with What You Have
+                                Invoice Purchase
                             </Title>
                             <Paragraph style={{ fontSize: 18, color: 'white', marginBottom: 24 }}>
-                                Turn the ingredients in your kitchen into delicious meals with Cook'n'Chat's
-                                AI-powered recipe assistant.
+                                Công cụ quản lý hóa đơn mua hàng thông minh, giúp bạn kiểm soát chi tiêu và lưu trữ hóa đơn dễ dàng, an toàn.
                             </Paragraph>
                             <Space>
-                                <>
-                                    <Button
-                                        type="primary"
-                                        size="large"
-                                        onClick={() => router.push('/register')}
-                                        style={{ background: 'white', color: '#52c41a', borderColor: 'white' }}
-                                    >
-                                        Get Started
-                                    </Button>
-                                    <Button
-                                        size="large"
-                                        onClick={() => router.push('/login')}
-                                        style={{ background: 'transparent', borderColor: 'white', color: 'white' }}
-                                    >
-                                        Sign In
-                                    </Button>
-                                </>
-
                                 <Button
                                     type="primary"
                                     size="large"
-                                    onClick={() => router.push('/chat')}
+                                    onClick={() => router.push('/register')}
                                     style={{ background: 'white', color: '#52c41a', borderColor: 'white' }}
                                 >
-                                    Start Cooking
+                                    Đăng ký ngay
+                                </Button>
+                                <Button
+                                    size="large"
+                                    onClick={() => router.push('/login')}
+                                    style={{ background: 'transparent', borderColor: 'white', color: 'white' }}
+                                >
+                                    Đăng nhập
                                 </Button>
                             </Space>
                         </div>
@@ -129,8 +98,8 @@ const HomePage = () => {
                     <Col xs={24} md={12}>
                         <div style={{ textAlign: 'center' }}>
                             <Image
-                                src="https://images.unsplash.com/photo-1556911220-e15b29be8c8f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3"
-                                alt="Cooking with ingredients"
+                                src="https://img.freepik.com/free-vector/invoice-concept-illustration_114360-2143.jpg?w=740"
+                                alt="Invoice management illustration"
                                 style={{ maxWidth: '100%', borderRadius: '8px', boxShadow: '0 10px 30px rgba(0, 0, 0, 0.2)' }}
                                 preview={false}
                             />
@@ -143,9 +112,9 @@ const HomePage = () => {
             <div style={{ padding: '60px 0', background: '#f7f7f7' }}>
                 <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 16px' }}>
                     <div style={{ textAlign: 'center', marginBottom: 48 }}>
-                        <Title level={2}>Why Cook'n'Chat?</Title>
+                        <Title level={2}>Tính năng nổi bật</Title>
                         <Paragraph style={{ fontSize: 16 }}>
-                            Our platform makes cooking easy, fun, and personalized to your needs.
+                            Tối ưu hóa việc quản lý hóa đơn và chi tiêu của bạn với các tính năng mạnh mẽ, dễ sử dụng.
                         </Paragraph>
                     </div>
 
@@ -174,55 +143,13 @@ const HomePage = () => {
                 </div>
             </div>
 
-            {/* Popular Recipes Section */}
-            <div style={{ padding: '60px 0' }}>
-                <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 16px' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 32 }}>
-                        <Title level={2} style={{ margin: 0 }}>Popular Recipes</Title>
-                        <Button
-                            type="link"
-                            onClick={() => router.push('/recipes')}
-                            icon={<ArrowRightOutlined />}
-                        >
-                            View All
-                        </Button>
-                    </div>
-
-                    <Row gutter={[24, 24]}>
-                        {popularRecipes.map((recipe, index) => (
-                            <Col xs={24} sm={12} md={8} key={index}>
-                                <Card
-                                    variant="borderless"
-                                    hoverable
-                                    cover={
-                                        <div style={{ height: 200, overflow: 'hidden' }}>
-                                            <img
-                                                alt={recipe.title}
-                                                src={recipe.imageUrl}
-                                                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                                            />
-                                        </div>
-                                    }
-                                    onClick={() => router.push('/recipes')}
-                                >
-                                    <Card.Meta
-                                        title={recipe.title}
-                                        description={recipe.description}
-                                    />
-                                </Card>
-                            </Col>
-                        ))}
-                    </Row>
-                </div>
-            </div>
-
             {/* How It Works Section */}
-            <div style={{ padding: '60px 0', background: '#f7f7f7' }}>
+            <div style={{ padding: '60px 0', background: '#fff' }}>
                 <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 16px' }}>
                     <div style={{ textAlign: 'center', marginBottom: 48 }}>
-                        <Title level={2}>How It Works</Title>
+                        <Title level={2}>Cách hoạt động</Title>
                         <Paragraph style={{ fontSize: 16 }}>
-                            Get cooking with Cook'n'Chat in just a few simple steps
+                            Chỉ với vài bước đơn giản, bạn đã có thể quản lý hóa đơn mua hàng hiệu quả.
                         </Paragraph>
                     </div>
 
@@ -270,9 +197,9 @@ const HomePage = () => {
             {/* CTA Section */}
             <div style={{ padding: '60px 0', background: '#52c41a', color: 'white', textAlign: 'center' }}>
                 <div style={{ maxWidth: 800, margin: '0 auto', padding: '0 16px' }}>
-                    <Title level={2} style={{ color: 'white' }}>Ready to start cooking?</Title>
+                    <Title level={2} style={{ color: 'white' }}>Sẵn sàng quản lý hóa đơn của bạn?</Title>
                     <Paragraph style={{ fontSize: 18, color: 'white', marginBottom: 24 }}>
-                        Join thousands of home cooks using Cook'n'Chat to discover delicious recipes tailored to their ingredients.
+                        Đăng ký ngay để trải nghiệm công cụ Invoice Purchase miễn phí!
                     </Paragraph>
                     <Space size="large">
                         <Button
@@ -281,24 +208,16 @@ const HomePage = () => {
                             onClick={() => router.push('/register')}
                             style={{ background: 'white', color: '#52c41a', borderColor: 'white' }}
                         >
-                            Sign Up Now
+                            Đăng ký ngay
                         </Button>
                         <Button
                             size="large"
                             onClick={() => router.push('/login')}
                             style={{ background: 'transparent', borderColor: 'white', color: 'white' }}
                         >
-                            Log In
+                            Đăng nhập
                         </Button>
                     </Space>
-                    <Button
-                        type="primary"
-                        size="large"
-                        onClick={() => router.push('/chat')}
-                        style={{ background: 'white', color: '#52c41a', borderColor: 'white' }}
-                    >
-                        Start Chatting
-                    </Button>
                 </div>
             </div>
         </>

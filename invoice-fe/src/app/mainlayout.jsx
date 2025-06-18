@@ -5,17 +5,21 @@ import Footer from './footer';
 
 const MainLayout = () => {
     return (
-        <div className="main-layout" style={{
-            display: 'flex',
-            flexDirection: 'column',
-            minHeight: '100vh'
-        }}>
-            <Header />
-            <main style={{ flex: 1 }}>
-                <Outlet />
-            </main>
-            <Footer />
-        </div>
+        <html lang="vi">
+            <body style={{ margin: 0 }}>
+                <div className="main-layout" style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    minHeight: '100vh'
+                }}>
+                    <Header />
+                    <main style={{ flex: 1 }}>
+                        <Outlet />
+                    </main>
+                    <Footer />
+                </div>
+            </body>
+        </html>
     );
 };
 
