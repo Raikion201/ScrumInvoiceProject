@@ -1,22 +1,30 @@
 package com.invoicebe.service;
 
 import com.invoicebe.model.Invoice; // Import Invoice entity
+
 import com.invoicebe.model.PurchaseRequest;
 import com.invoicebe.repository.PurchaseRequestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class PurchaseRequestService {
-
     private final PurchaseRequestRepository purchaseRequestRepository;
     private final InvoiceService invoiceService; // Inject InvoiceService here
 
     @Autowired
-    public PurchaseRequestService(PurchaseRequestRepository purchaseRequestRepository,
+    private PurchaseRequestRepository repository;
+
+    public List<PurchaseRequest> getPurchaseRequests(String status, LocalDate startDueDate, LocalDate endDueDate, Boolean isPaid) {
+        String statusEnum = status != null ? status.toUpperCase() : null;
+        return repository.findByFilters(statusEnum, startDueDate, endDueDate, isPaid);
+    }
+
+        public PurchaseRequestService(PurchaseRequestRepository purchaseRequestRepository,
                                   InvoiceService invoiceService) { // Add InvoiceService to constructor
         this.purchaseRequestRepository = purchaseRequestRepository;
         this.invoiceService = invoiceService; // Initialize it
@@ -76,7 +84,7 @@ public class PurchaseRequestService {
         });
     }
 
-    /**
+        /**
      * Deletes a Purchase Request by its ID.
      * @param id The ID of the purchase request to delete.
      * @return True if the purchase request was deleted, false otherwise.
@@ -121,7 +129,7 @@ public class PurchaseRequestService {
             Invoice createdInvoice = invoiceService.createInvoice(newInvoice);
 
             // 3. Update the PurchaseRequest status and link to the created Invoice
-            purchaseRequest.setStatus("CONVERTED_TO_INVOICE");
+            //purchaseRequest.setStatus("CONVERTED_TO_INVOICE");
             purchaseRequest.setInvoice(createdInvoice); // Set the inverse side of the relationship
             purchaseRequestRepository.save(purchaseRequest); // Save the updated PurchaseRequest
 

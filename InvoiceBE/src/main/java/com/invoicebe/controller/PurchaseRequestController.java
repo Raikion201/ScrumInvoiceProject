@@ -1,41 +1,50 @@
 package com.invoicebe.controller;
 
 import com.invoicebe.model.Invoice; // Import Invoice
+import jakarta.validation.Valid;
 import com.invoicebe.model.PurchaseRequest;
 import com.invoicebe.service.PurchaseRequestService;
-import jakarta.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/purchase-requests")
+@CrossOrigin(origins = "http://localhost:3000")
 public class PurchaseRequestController {
-
     private final PurchaseRequestService purchaseRequestService;
 
     @Autowired
+    private PurchaseRequestService service;
     public PurchaseRequestController(PurchaseRequestService purchaseRequestService) {
         this.purchaseRequestService = purchaseRequestService;
     }
 
-    @PostMapping
-    public ResponseEntity<PurchaseRequest> createPurchaseRequest(@Valid @RequestBody PurchaseRequest purchaseRequest) {
-        PurchaseRequest createdRequest = purchaseRequestService.createPurchaseRequest(purchaseRequest);
-        return new ResponseEntity<>(createdRequest, HttpStatus.CREATED);
-    }
-
     @GetMapping
+    public ResponseEntity<List<PurchaseRequest>> getPurchaseRequests(
+        @RequestParam(required = false) String status,
+        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDueDate,
+        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDueDate,
+        @RequestParam(required = false) Boolean isPaid
+    ) {
+        try {
+            List<PurchaseRequest> requests = service.getPurchaseRequests(status, startDueDate, endDueDate, isPaid);
+            return ResponseEntity.ok(requests);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(null);
+        }
+    }
     public ResponseEntity<List<PurchaseRequest>> getAllPurchaseRequests() {
         return ResponseEntity.ok(purchaseRequestService.getAllPurchaseRequests());
     }
 
-    @GetMapping("/{id}")
+        @GetMapping("/{id}")
     public ResponseEntity<PurchaseRequest> getPurchaseRequestById(@PathVariable Long id) {
         return purchaseRequestService.getPurchaseRequestById(id)
                 .map(ResponseEntity::ok)

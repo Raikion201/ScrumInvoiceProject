@@ -2,10 +2,21 @@ package com.invoicebe.repository;
 
 import com.invoicebe.model.PurchaseRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
-@Repository
+import java.time.LocalDate;
+import java.util.List;
+
 public interface PurchaseRequestRepository extends JpaRepository<PurchaseRequest, Long> {
-    // This interface automatically provides basic CRUD operations:
-    // save(), findById(), findAll(), deleteById(), etc.
+    @Query("SELECT pr FROM PurchaseRequest pr WHERE (:status IS NULL OR pr.status = :status) " +
+           "AND (:startDueDate IS NULL OR pr.dueDate >= :startDueDate) " +
+           "AND (:endDueDate IS NULL OR pr.dueDate <= :endDueDate) " +
+           "AND (:isPaid IS NULL OR pr.isPaid = :isPaid)")
+    List<PurchaseRequest> findByFilters(
+        @Param("status") String status,
+        @Param("startDueDate") LocalDate startDueDate,
+        @Param("endDueDate") LocalDate endDueDate,
+        @Param("isPaid") Boolean isPaid
+    );
 }

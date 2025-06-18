@@ -22,7 +22,6 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Builder
 public class PurchaseRequest {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -55,10 +54,10 @@ public class PurchaseRequest {
     private LocalDate dueDate;
 
     @NotBlank(message = "Status cannot be empty")
-    @Pattern(regexp = "PENDING|DELIVERED|CONVERTED_TO_INVOICE", message = "Status must be 'PENDING', 'DELIVERED', or 'CONVERTED_TO_INVOICE'") // Added new status
+    @Pattern(regexp = "PENDING|DELIVERED", message = "Status must be 'PENDING' or 'DELIVERED'")
     @Column(nullable = false)
     private String status;
-
+    // DELIVERED + isPaid = true -> Invoice created
     @NotNull(message = "Is Paid status cannot be null")
     @Column(nullable = false)
     private Boolean isPaid;
