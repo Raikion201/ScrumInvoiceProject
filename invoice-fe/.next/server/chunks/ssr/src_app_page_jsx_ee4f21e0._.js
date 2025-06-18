@@ -40,7 +40,7 @@ const features = [
             }
         }, void 0, false, {
             fileName: "[project]/src/app/page.jsx",
-            lineNumber: 18,
+            lineNumber: 17,
             columnNumber: 15
         }, this),
         title: 'Quản lý hóa đơn',
@@ -54,7 +54,7 @@ const features = [
             }
         }, void 0, false, {
             fileName: "[project]/src/app/page.jsx",
-            lineNumber: 23,
+            lineNumber: 22,
             columnNumber: 15
         }, this),
         title: 'Theo dõi chi phí',
@@ -68,7 +68,7 @@ const features = [
             }
         }, void 0, false, {
             fileName: "[project]/src/app/page.jsx",
-            lineNumber: 28,
+            lineNumber: 27,
             columnNumber: 15
         }, this),
         title: 'Nhập hóa đơn nhanh',
@@ -82,7 +82,7 @@ const features = [
             }
         }, void 0, false, {
             fileName: "[project]/src/app/page.jsx",
-            lineNumber: 33,
+            lineNumber: 32,
             columnNumber: 15
         }, this),
         title: 'Báo cáo thông minh',
@@ -147,7 +147,7 @@ const HomePage = ()=>{
                                         children: "Invoice Purchase"
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/page.jsx",
-                                        lineNumber: 74,
+                                        lineNumber: 73,
                                         columnNumber: 29
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(Paragraph, {
@@ -159,7 +159,7 @@ const HomePage = ()=>{
                                         children: "Công cụ quản lý hóa đơn mua hàng thông minh, giúp bạn kiểm soát chi tiêu và lưu trữ hóa đơn dễ dàng, an toàn."
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/page.jsx",
-                                        lineNumber: 77,
+                                        lineNumber: 76,
                                         columnNumber: 29
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$antd$2f$es$2f$space$2f$index$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$locals$3e$__$3c$export__default__as__Space$3e$__["Space"], {
@@ -176,7 +176,7 @@ const HomePage = ()=>{
                                                 children: "Đăng ký ngay"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/page.jsx",
-                                                lineNumber: 81,
+                                                lineNumber: 80,
                                                 columnNumber: 33
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$antd$2f$es$2f$button$2f$index$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$locals$3e$__$3c$export__default__as__Button$3e$__["Button"], {
@@ -190,24 +190,24 @@ const HomePage = ()=>{
                                                 children: "Đăng nhập"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/page.jsx",
-                                                lineNumber: 89,
+                                                lineNumber: 88,
                                                 columnNumber: 33
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/page.jsx",
-                                        lineNumber: 80,
+                                        lineNumber: 79,
                                         columnNumber: 29
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/page.jsx",
-                                lineNumber: 73,
+                                lineNumber: 72,
                                 columnNumber: 25
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/app/page.jsx",
-                            lineNumber: 72,
+                            lineNumber: 71,
                             columnNumber: 21
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$antd$2f$es$2f$col$2f$index$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Col$3e$__["Col"], {
@@ -228,28 +228,28 @@ const HomePage = ()=>{
                                     preview: false
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/page.jsx",
-                                    lineNumber: 101,
+                                    lineNumber: 100,
                                     columnNumber: 29
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/app/page.jsx",
-                                lineNumber: 100,
+                                lineNumber: 99,
                                 columnNumber: 25
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/app/page.jsx",
-                            lineNumber: 99,
+                            lineNumber: 98,
                             columnNumber: 21
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/app/page.jsx",
-                    lineNumber: 71,
+                    lineNumber: 70,
                     columnNumber: 17
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/app/page.jsx",
-                lineNumber: 64,
+                lineNumber: 63,
                 columnNumber: 13
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -275,7 +275,7 @@ const HomePage = ()=>{
                                     children: "Tính năng nổi bật"
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/page.jsx",
-                                    lineNumber: 116,
+                                    lineNumber: 115,
                                     columnNumber: 25
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(Paragraph, {
@@ -285,13 +285,13 @@ const HomePage = ()=>{
                                     children: "Tối ưu hóa việc quản lý hóa đơn và chi tiêu của bạn với các tính năng mạnh mẽ, dễ sử dụng."
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/page.jsx",
-                                    lineNumber: 117,
+                                    lineNumber: 116,
                                     columnNumber: 25
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/page.jsx",
-                            lineNumber: 115,
+                            lineNumber: 114,
                             columnNumber: 21
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$antd$2f$es$2f$row$2f$index$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Row$3e$__["Row"], {
@@ -322,7 +322,7 @@ const HomePage = ()=>{
                                                 children: feature.icon
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/page.jsx",
-                                                lineNumber: 137,
+                                                lineNumber: 136,
                                                 columnNumber: 37
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(Title, {
@@ -330,41 +330,41 @@ const HomePage = ()=>{
                                                 children: feature.title
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/page.jsx",
-                                                lineNumber: 138,
+                                                lineNumber: 137,
                                                 columnNumber: 37
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(Paragraph, {
                                                 children: feature.description
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/page.jsx",
-                                                lineNumber: 139,
+                                                lineNumber: 138,
                                                 columnNumber: 37
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/page.jsx",
-                                        lineNumber: 125,
+                                        lineNumber: 124,
                                         columnNumber: 33
                                     }, this)
                                 }, index, false, {
                                     fileName: "[project]/src/app/page.jsx",
-                                    lineNumber: 124,
+                                    lineNumber: 123,
                                     columnNumber: 29
                                 }, this))
                         }, void 0, false, {
                             fileName: "[project]/src/app/page.jsx",
-                            lineNumber: 122,
+                            lineNumber: 121,
                             columnNumber: 21
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/app/page.jsx",
-                    lineNumber: 114,
+                    lineNumber: 113,
                     columnNumber: 17
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/app/page.jsx",
-                lineNumber: 113,
+                lineNumber: 112,
                 columnNumber: 13
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -390,7 +390,7 @@ const HomePage = ()=>{
                                     children: "Cách hoạt động"
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/page.jsx",
-                                    lineNumber: 151,
+                                    lineNumber: 150,
                                     columnNumber: 25
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(Paragraph, {
@@ -400,13 +400,13 @@ const HomePage = ()=>{
                                     children: "Chỉ với vài bước đơn giản, bạn đã có thể quản lý hóa đơn mua hàng hiệu quả."
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/page.jsx",
-                                    lineNumber: 152,
+                                    lineNumber: 151,
                                     columnNumber: 25
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/page.jsx",
-                            lineNumber: 150,
+                            lineNumber: 149,
                             columnNumber: 21
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$antd$2f$es$2f$list$2f$index$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__List$3e$__["List"], {
@@ -443,7 +443,7 @@ const HomePage = ()=>{
                                                 children: index + 1
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/page.jsx",
-                                                lineNumber: 172,
+                                                lineNumber: 171,
                                                 columnNumber: 37
                                             }, void 0),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(Title, {
@@ -451,41 +451,41 @@ const HomePage = ()=>{
                                                 children: item.title
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/page.jsx",
-                                                lineNumber: 189,
+                                                lineNumber: 188,
                                                 columnNumber: 37
                                             }, void 0),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(Paragraph, {
                                                 children: item.content
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/page.jsx",
-                                                lineNumber: 190,
+                                                lineNumber: 189,
                                                 columnNumber: 37
                                             }, void 0)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/page.jsx",
-                                        lineNumber: 168,
+                                        lineNumber: 167,
                                         columnNumber: 33
                                     }, void 0)
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/page.jsx",
-                                    lineNumber: 167,
+                                    lineNumber: 166,
                                     columnNumber: 29
                                 }, void 0)
                         }, void 0, false, {
                             fileName: "[project]/src/app/page.jsx",
-                            lineNumber: 157,
+                            lineNumber: 156,
                             columnNumber: 21
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/app/page.jsx",
-                    lineNumber: 149,
+                    lineNumber: 148,
                     columnNumber: 17
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/app/page.jsx",
-                lineNumber: 148,
+                lineNumber: 147,
                 columnNumber: 13
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -510,7 +510,7 @@ const HomePage = ()=>{
                             children: "Sẵn sàng quản lý hóa đơn của bạn?"
                         }, void 0, false, {
                             fileName: "[project]/src/app/page.jsx",
-                            lineNumber: 201,
+                            lineNumber: 200,
                             columnNumber: 21
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(Paragraph, {
@@ -522,7 +522,7 @@ const HomePage = ()=>{
                             children: "Đăng ký ngay để trải nghiệm công cụ Invoice Purchase miễn phí!"
                         }, void 0, false, {
                             fileName: "[project]/src/app/page.jsx",
-                            lineNumber: 202,
+                            lineNumber: 201,
                             columnNumber: 21
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$antd$2f$es$2f$space$2f$index$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$locals$3e$__$3c$export__default__as__Space$3e$__["Space"], {
@@ -540,7 +540,7 @@ const HomePage = ()=>{
                                     children: "Đăng ký ngay"
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/page.jsx",
-                                    lineNumber: 206,
+                                    lineNumber: 205,
                                     columnNumber: 25
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$antd$2f$es$2f$button$2f$index$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$locals$3e$__$3c$export__default__as__Button$3e$__["Button"], {
@@ -554,24 +554,24 @@ const HomePage = ()=>{
                                     children: "Đăng nhập"
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/page.jsx",
-                                    lineNumber: 214,
+                                    lineNumber: 213,
                                     columnNumber: 25
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/page.jsx",
-                            lineNumber: 205,
+                            lineNumber: 204,
                             columnNumber: 21
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/app/page.jsx",
-                    lineNumber: 200,
+                    lineNumber: 199,
                     columnNumber: 17
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/app/page.jsx",
-                lineNumber: 199,
+                lineNumber: 198,
                 columnNumber: 13
             }, this)
         ]

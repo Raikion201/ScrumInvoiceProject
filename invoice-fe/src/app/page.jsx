@@ -7,7 +7,6 @@ import {
     DollarOutlined,
     CloudUploadOutlined,
     CheckCircleOutlined,
-    ArrowRightOutlined
 } from '@ant-design/icons';
 
 const { Title, Paragraph } = Typography;
