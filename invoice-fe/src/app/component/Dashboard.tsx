@@ -14,6 +14,7 @@ import { usePurchaseRequestStore } from '../store/purchaseRequestStore'
 import CreatePurchaseRequestForm from './CreatePurchaseRequestForm'
 import PurchaseRequestList from './PurchaseRequestList'
 import InvoiceList from './InvoiceList'
+import BillsList from './BillsList'
 import PurchaseRequestDetailModal from './PurchaseRequestDetailModal'
 import InvoiceDetailModal from './InvoiceDetailModal'
 import { PurchaseRequest, Invoice } from '../services/apiService'
@@ -26,8 +27,10 @@ const Dashboard: React.FC = () => {
     const searchParams = useSearchParams()
     const { 
         purchaseRequests = [], 
+        bills = [],
         invoices = [], 
         fetchPurchaseRequests,
+        fetchBills,
         fetchInvoices,
         fetchDashboardStatistics,
         dashboardStats,
@@ -44,9 +47,10 @@ const Dashboard: React.FC = () => {
     useEffect(() => {
         console.log("Dashboard: Fetching data...");
         fetchPurchaseRequests();
+        fetchBills();
         fetchInvoices();
         fetchDashboardStatistics();
-    }, [fetchPurchaseRequests, fetchInvoices, fetchDashboardStatistics])
+    }, [fetchPurchaseRequests, fetchBills, fetchInvoices, fetchDashboardStatistics])
 
     // Set active tab based on URL parameter
     useEffect(() => {
@@ -56,18 +60,20 @@ const Dashboard: React.FC = () => {
         }
     }, [searchParams])
 
-    // Safely filter requests and invoices - guaranteed to be arrays now
-    const pendingRequests = purchaseRequests.filter(req => req?.status === 'PENDING').length;
-    const deliveredRequests = purchaseRequests.filter(req => req?.status === 'DELIVERED').length;
-    const convertedRequests = purchaseRequests.filter(req => req?.status === 'CONVERTED_TO_INVOICE').length;
-    const unpaidInvoices = invoices.filter(inv => inv && !inv.paid).length;
-    const paidInvoices = invoices.filter(inv => inv && inv.paid).length;
+    // Safely filter requests and invoices
+    const pendingRequests = purchaseRequests.length;
+    const shippedRequests = bills.length;
+    const paidRequests = invoices.length;
 
     // Use dashboard stats if available
     const pendingCount = dashboardStats?.countByStatus?.PENDING || pendingRequests;
-    const deliveredCount = dashboardStats?.countByStatus?.DELIVERED || deliveredRequests;
-    const convertedCount = dashboardStats?.countByStatus?.CONVERTED_TO_INVOICE || convertedRequests;
+    const shippedCount = dashboardStats?.countByStatus?.SHIPPED || shippedRequests;
+    const paidCount = dashboardStats?.countByStatus?.PAID || paidRequests;
     const overdueCount = dashboardStats?.overdueCount || 0;
+
+    // Define unpaid and paid invoices
+    const unpaidInvoices = invoices.filter(invoice => !invoice.paid);
+    const paidInvoices = invoices.filter(invoice => invoice.paid).length; // Add this line to define paidInvoices
 
     const handleViewPurchaseRequest = (request: PurchaseRequest) => {
         setSelectedPurchaseRequest(request)
@@ -93,37 +99,15 @@ const Dashboard: React.FC = () => {
     const getStatusColor = (status: string) => {
         switch (status) {
             case 'PENDING': return 'orange';
-            case 'DELIVERED': return 'blue';
-            case 'CONVERTED_TO_INVOICE': return 'green';
+            case 'SHIPPED': return 'blue';
+            case 'PAID': return 'green';
             default: return 'default';
         }
     }
 
     return (
-        <div className="p-6">
-            <div className="mb-6 flex justify-between items-center">
-                <div>
-                    <Title level={2}>Invoice Management Dashboard</Title>
-                    <p className="text-gray-600">Manage purchase requests, deliveries, and invoices</p>
-                </div>
-                <button 
-                    onClick={handleRefresh} 
-                    className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
-                >
-                    Refresh Data
-                </button>
-            </div>
-
-            {error && (
-                <Alert
-                    message="Error Loading Data"
-                    description={error}
-                    type="error"
-                    className="mb-6"
-                    showIcon
-                    closable
-                />
-            )}
+        <div style={{padding:"6px"}} className="p-6">
+        
 
             {/* Statistics Cards */}
             <Row gutter={16} className="mb-6">
@@ -141,8 +125,8 @@ const Dashboard: React.FC = () => {
                 <Col xs={24} sm={12} md={8} lg={4}>
                     <Card>
                         <Statistic
-                            title="Delivered"
-                            value={deliveredCount}
+                            title="Shipped (Bills)"
+                            value={shippedCount}
                             prefix={<CheckCircleOutlined />}
                             valueStyle={{ color: '#1890ff' }}
                             loading={loading}
@@ -152,8 +136,8 @@ const Dashboard: React.FC = () => {
                 <Col xs={24} sm={12} md={8} lg={4}>
                     <Card>
                         <Statistic
-                            title="Converted"
-                            value={convertedCount}
+                            title="Paid (Invoices)"
+                            value={paidCount}
                             prefix={<FileTextOutlined />}
                             valueStyle={{ color: '#52c41a' }}
                             loading={loading}
@@ -164,7 +148,7 @@ const Dashboard: React.FC = () => {
                     <Card>
                         <Statistic
                             title="Unpaid Invoices"
-                            value={unpaidInvoices}
+                            value={unpaidInvoices.length} // Use unpaidInvoices here
                             prefix={<DollarOutlined />}
                             valueStyle={{ color: '#ff4d4f' }}
                             loading={loading}
@@ -175,7 +159,7 @@ const Dashboard: React.FC = () => {
                     <Card>
                         <Statistic
                             title="Paid Invoices"
-                            value={paidInvoices}
+                            value={paidInvoices} // Now this variable is properly defined
                             prefix={<FileTextOutlined />}
                             valueStyle={{ color: '#52c41a' }}
                             loading={loading}
@@ -231,7 +215,7 @@ const Dashboard: React.FC = () => {
             )}
 
             {/* Create Purchase Request Form */}
-            <CreatePurchaseRequestForm onSuccess={handleRefresh} />
+            <CreatePurchaseRequestForm  onSuccess={handleRefresh} />
 
             {/* Main Content Tabs */}
             <Tabs
@@ -245,17 +229,27 @@ const Dashboard: React.FC = () => {
                         label: (
                             <span>
                                 <FileTextOutlined />
-                                Purchase Requests ({Array.isArray(purchaseRequests) ? purchaseRequests.length : 0})
+                                Purchase Requests ({purchaseRequests.length})
                             </span>
                         ),
                         children: <PurchaseRequestList onViewDetails={handleViewPurchaseRequest} />,
+                    },
+                    {
+                        key: 'bills',
+                        label: (
+                            <span>
+                                <FileTextOutlined />
+                                Bills ({bills.length})
+                            </span>
+                        ),
+                        children: <BillsList onViewDetails={handleViewPurchaseRequest} />,
                     },
                     {
                         key: 'invoices',
                         label: (
                             <span>
                                 <DollarOutlined />
-                                Invoices ({Array.isArray(invoices) ? invoices.length : 0})
+                                Invoices ({invoices.length})
                             </span>
                         ),
                         children: <InvoiceList onViewDetails={handleViewInvoice} />,

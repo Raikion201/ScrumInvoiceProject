@@ -51,11 +51,11 @@ public class PurchaseRequestService {
     }
 
     /**
-     * Retrieves all Purchase Requests.
-     * @return A list of all PurchaseRequest objects.
+     * Retrieves only PENDING purchase requests for the main Purchase Requests tab.
+     * @return A list of all PENDING PurchaseRequest objects.
      */
     public List<PurchaseRequest> getAllPurchaseRequests() {
-        return purchaseRequestRepository.findAll();
+        return purchaseRequestRepository.findByFilters("PENDING", null, null, null);
     }
 
     /**
@@ -254,5 +254,77 @@ public class PurchaseRequestService {
         System.out.println("Latest 5 requests retrieved for dashboard");
         
         return statistics;
+    }
+
+    /**
+     * Mark a purchase request as shipped (moves to Bills tab)
+     * 
+     * @param id The ID of the purchase request
+     * @return The updated purchase request
+     */
+    public Optional<PurchaseRequest> markAsShipped(Long id) {
+        return purchaseRequestRepository.findById(id).map(req -> {
+            if ("PENDING".equals(req.getStatus())) {
+                req.setStatus("SHIPPED");
+                
+                // Generate a bill number if one doesn't exist
+                if (req.getInvoiceNumber() == null || req.getInvoiceNumber().isEmpty()) {
+                    String billNumber = "BILL-" + req.getId() + "-" + LocalDate.now().toString().replaceAll("-", "");
+                    req.setInvoiceNumber(billNumber);
+                }
+                
+                System.out.println("Purchase Request #" + id + " marked as SHIPPED");
+            }
+            return purchaseRequestRepository.save(req);
+        });
+    }
+    
+    /**
+     * Mark a bill as paid (moves to Invoices tab)
+     * 
+     * @param id The ID of the bill (shipped purchase request)
+     * @return The updated purchase request
+     */
+    public Optional<PurchaseRequest> markAsPaid(Long id) {
+        return purchaseRequestRepository.findById(id).map(req -> {
+            if ("SHIPPED".equals(req.getStatus())) {
+                req.setStatus("PAID");
+                req.setIsPaid(true);
+                req.setInvoiceDate(LocalDate.now());
+                
+                // Create an invoice entry for this paid bill
+                Invoice invoice = Invoice.builder()
+                    .invoiceNumber(req.getInvoiceNumber())
+                    .customerName(req.getCustomerName())
+                    .customerEmail(req.getCustomerEmail())
+                    .amount(req.getTotalAmount())
+                    .invoiceDate(LocalDate.now())
+                    .dueDate(req.getDueDate())
+                    .description("Generated from Purchase Request: " + req.getDescription())
+                    .paid(true)
+                    .purchaseRequest(req)
+                    .build();
+                
+                Invoice savedInvoice = invoiceService.createInvoice(invoice);
+                req.setInvoice(savedInvoice);
+                
+                System.out.println("Purchase Request #" + id + " marked as PAID and moved to invoices");
+            }
+            return purchaseRequestRepository.save(req);
+        });
+    }
+    
+    /**
+     * Get all bills (purchase requests with SHIPPED status)
+     */
+    public List<PurchaseRequest> getAllBills() {
+        return purchaseRequestRepository.findByFilters("SHIPPED", null, null, null);
+    }
+    
+    /**
+     * Get all paid requests/invoices (with PAID status)
+     */
+    public List<PurchaseRequest> getAllPaidRequests() {
+        return purchaseRequestRepository.findByFilters("PAID", null, null, null);
     }
 }

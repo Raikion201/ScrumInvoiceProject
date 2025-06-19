@@ -9,7 +9,7 @@ export interface PurchaseRequest {
     totalAmount: number
     depositAmount: number
     dueDate: string
-    status: 'PENDING' | 'DELIVERED' | 'CONVERTED_TO_INVOICE'
+    status: 'PENDING' | 'SHIPPED' | 'PAID'
     isPaid: boolean
     invoiceDate: string
     invoiceNumber: string
@@ -50,10 +50,14 @@ export const purchaseRequestAPI = {
         return response.data
     },
 
-    // Get all purchase requests
+    // Get all purchase requests (only PENDING ones for the main tab)
     getAll: async (): Promise<PurchaseRequest[]> => {
-        const response = await api.get('/purchase-requests')
-        return response.data
+        const response = await api.get('/purchase-requests', {
+            params: {
+                status: 'PENDING'  // Only fetch PENDING requests for the main Purchase Requests tab
+            }
+        });
+        return response.data;
     },
 
     // Get purchase request by ID
@@ -84,6 +88,30 @@ export const purchaseRequestAPI = {
     // Convert to invoice
     convertToInvoice: async (id: number): Promise<Invoice> => {
         const response = await api.put(`/purchase-requests/${id}/convert-to-invoice`)
+        return response.data
+    },
+
+    // Mark as shipped (moves to Bills)
+    markAsShipped: async (id: number): Promise<PurchaseRequest> => {
+        const response = await api.put(`/purchase-requests/${id}/mark-shipped`)
+        return response.data
+    },
+
+    // Mark as paid (moves to Invoices)
+    markAsPaid: async (id: number): Promise<PurchaseRequest> => {
+        const response = await api.put(`/purchase-requests/${id}/mark-paid`)
+        return response.data
+    },
+
+    // Get all bills (SHIPPED status)
+    getBills: async (): Promise<PurchaseRequest[]> => {
+        const response = await api.get('/purchase-requests/bills')
+        return response.data
+    },
+
+    // Get all paid requests (PAID status)
+    getPaid: async (): Promise<PurchaseRequest[]> => {
+        const response = await api.get('/purchase-requests/paid')
         return response.data
     },
 

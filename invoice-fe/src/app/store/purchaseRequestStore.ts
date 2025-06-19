@@ -4,6 +4,7 @@ import { toast } from 'sonner'
 
 interface PurchaseRequestState {
     purchaseRequests: PurchaseRequest[]
+    bills: PurchaseRequest[]
     invoices: Invoice[]
     loading: boolean
     error: string | null
@@ -18,7 +19,9 @@ interface PurchaseRequestState {
     convertToInvoice: (id: number) => Promise<void>
 
     fetchInvoices: () => Promise<void>
-    markInvoiceAsPaid: (id: number) => Promise<void>
+    fetchBills: () => Promise<void>
+    markAsShipped: (id: number) => Promise<void>
+    markAsPaid: (id: number) => Promise<void>
     fetchDashboardStatistics: () => Promise<void>
 
     setLoading: (loading: boolean) => void
@@ -27,6 +30,7 @@ interface PurchaseRequestState {
 
 export const usePurchaseRequestStore = create<PurchaseRequestState>((set, get) => ({
     purchaseRequests: [],
+    bills: [],
     invoices: [],
     loading: false,
     error: null,
@@ -40,7 +44,13 @@ export const usePurchaseRequestStore = create<PurchaseRequestState>((set, get) =
             set({ loading: true, error: null })
             const data = await purchaseRequestAPI.getAll()
             console.log('Store: Updated purchase requests state with:', data)
-            set({ purchaseRequests: Array.isArray(data) ? data : [] })
+            
+            // Extra safety filter to ensure only PENDING requests are shown in the requests tab
+            const pendingRequests = Array.isArray(data) 
+                ? data.filter(req => req.status === 'PENDING')
+                : [];
+                
+            set({ purchaseRequests: pendingRequests })
         } catch (error) {
             const errorMessage = error instanceof Error ? error.message : 'Failed to fetch purchase requests'
             set({ error: errorMessage })
@@ -162,18 +172,59 @@ export const usePurchaseRequestStore = create<PurchaseRequestState>((set, get) =
         }
     },
 
-    markInvoiceAsPaid: async (id: number) => {
+    fetchBills: async () => {
         try {
             set({ loading: true, error: null })
-            const updatedInvoice = await invoiceAPI.markAsPaid(id)
-            set((state) => ({
-                invoices: state.invoices.map(inv =>
-                    inv.id === id ? updatedInvoice : inv
-                )
-            }))
-            toast.success('Invoice marked as paid!')
+            const data = await purchaseRequestAPI.getBills()
+            console.log('Store: Updated bills state with:', data)
+            set({ bills: Array.isArray(data) ? data : [] })
         } catch (error) {
-            const errorMessage = error instanceof Error ? error.message : 'Failed to mark invoice as paid'
+            const errorMessage = error instanceof Error ? error.message : 'Failed to fetch bills'
+            set({ error: errorMessage })
+            toast.error(errorMessage)
+            set(state => ({ bills: Array.isArray(state.bills) ? state.bills : [] }))
+        } finally {
+            set({ loading: false })
+        }
+    },
+
+    markAsShipped: async (id: number) => {
+        try {
+            set({ loading: true, error: null })
+            const updatedRequest = await purchaseRequestAPI.markAsShipped(id)
+            set((state) => ({
+                // Remove from purchase requests
+                purchaseRequests: state.purchaseRequests.filter(req => req.id !== id),
+                // Add to bills
+                bills: [...state.bills, updatedRequest]
+            }))
+            toast.success('Request marked as shipped!')
+        } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : 'Failed to mark as shipped'
+            set({ error: errorMessage })
+            toast.error(errorMessage)
+        } finally {
+            set({ loading: false })
+        }
+    },
+
+    markAsPaid: async (id: number) => {
+        try {
+            set({ loading: true, error: null })
+            const updatedRequest = await purchaseRequestAPI.markAsPaid(id)
+            
+            // Get the invoice for this paid request
+            const invoice = await invoiceAPI.getById(updatedRequest.invoice.id)
+            
+            set((state) => ({
+                // Remove from bills
+                bills: state.bills.filter(bill => bill.id !== id),
+                // Add invoice
+                invoices: [...state.invoices, invoice]
+            }))
+            toast.success('Bill marked as paid!')
+        } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : 'Failed to mark as paid'
             set({ error: errorMessage })
             toast.error(errorMessage)
         } finally {

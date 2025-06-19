@@ -1,11 +1,10 @@
 'use client'
 
 import React, { useEffect } from 'react'
-import { Table, Button, Tag, Space, Card, Typography, Popconfirm } from 'antd'
+import { Table, Button, Tag, Space, Card, Typography } from 'antd'
 import {
     EyeOutlined,
-    CheckCircleOutlined,
-    DollarOutlined
+    CheckCircleOutlined
 } from '@ant-design/icons'
 import { usePurchaseRequestStore } from '../store/purchaseRequestStore'
 import { Invoice } from '../services/apiService'
@@ -21,21 +20,12 @@ const InvoiceList: React.FC<InvoiceListProps> = ({ onViewDetails }) => {
     const {
         invoices,
         loading,
-        fetchInvoices,
-        markInvoiceAsPaid
+        fetchInvoices
     } = usePurchaseRequestStore()
 
     useEffect(() => {
         fetchInvoices()
     }, [fetchInvoices])
-
-    const getPaymentStatusColor = (paid: boolean) => {
-        return paid ? 'green' : 'red'
-    }
-
-    const getPaymentStatusText = (paid: boolean) => {
-        return paid ? 'Paid' : 'Unpaid'
-    }
 
     const isOverdue = (dueDate: string) => {
         return dayjs(dueDate).isBefore(dayjs(), 'day')
@@ -108,8 +98,8 @@ const InvoiceList: React.FC<InvoiceListProps> = ({ onViewDetails }) => {
             dataIndex: 'paid',
             key: 'paid',
             render: (paid: boolean) => (
-                <Tag color={getPaymentStatusColor(paid)} icon={paid ? <CheckCircleOutlined /> : <DollarOutlined />}>
-                    {getPaymentStatusText(paid)}
+                <Tag color="green" icon={<CheckCircleOutlined />}>
+                    Paid
                 </Tag>
             )
         },
@@ -117,33 +107,12 @@ const InvoiceList: React.FC<InvoiceListProps> = ({ onViewDetails }) => {
             title: 'Actions',
             key: 'actions',
             render: (record: Invoice) => (
-                <Space size="small">
-                    <Button
-                        type="text"
-                        icon={<EyeOutlined />}
-                        onClick={() => onViewDetails?.(record)}
-                        title="View Details"
-                    />
-
-                    {!record.paid && (
-                        <Popconfirm
-                            title="Mark as Paid"
-                            description="Are you sure you want to mark this invoice as paid?"
-                            onConfirm={() => markInvoiceAsPaid(record.id!)}
-                            okText="Yes"
-                            cancelText="No"
-                        >
-                            <Button
-                                type="primary"
-                                size="small"
-                                icon={<CheckCircleOutlined />}
-                                title="Mark as Paid"
-                            >
-                                Mark as Paid
-                            </Button>
-                        </Popconfirm>
-                    )}
-                </Space>
+                <Button
+                    type="text"
+                    icon={<EyeOutlined />}
+                    onClick={() => onViewDetails?.(record)}
+                    title="View Details"
+                />
             )
         }
     ]
@@ -168,4 +137,4 @@ const InvoiceList: React.FC<InvoiceListProps> = ({ onViewDetails }) => {
     )
 }
 
-export default InvoiceList 
+export default InvoiceList

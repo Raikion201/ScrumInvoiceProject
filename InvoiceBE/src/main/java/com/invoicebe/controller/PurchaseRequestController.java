@@ -187,4 +187,48 @@ public class PurchaseRequestController {
             return ResponseEntity.status(500).body("Error fetching dashboard statistics");
         }
     }
+
+    // Mark as Shipped (moves to Bills)
+    @PutMapping("/{id}/mark-shipped")
+    public ResponseEntity<PurchaseRequest> markAsShipped(@PathVariable Long id) {
+        System.out.println("Marking purchase request #" + id + " as shipped");
+        return purchaseRequestService.markAsShipped(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    // Mark as Paid (moves to Invoices)
+    @PutMapping("/{id}/mark-paid")
+    public ResponseEntity<PurchaseRequest> markAsPaid(@PathVariable Long id) {
+        System.out.println("Marking bill #" + id + " as paid");
+        return purchaseRequestService.markAsPaid(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    // Get all bills (shipped requests)
+    @GetMapping("/bills")
+    public ResponseEntity<List<PurchaseRequest>> getBills() {
+        try {
+            List<PurchaseRequest> bills = purchaseRequestService.getAllBills();
+            System.out.println("Retrieved " + bills.size() + " bills");
+            return ResponseEntity.ok(bills);
+        } catch (Exception e) {
+            System.err.println("Error retrieving bills: " + e.getMessage());
+            return ResponseEntity.status(500).body(null);
+        }
+    }
+    
+    // Get all paid requests (invoices)
+    @GetMapping("/paid")
+    public ResponseEntity<List<PurchaseRequest>> getPaidRequests() {
+        try {
+            List<PurchaseRequest> paid = purchaseRequestService.getAllPaidRequests();
+            System.out.println("Retrieved " + paid.size() + " paid requests");
+            return ResponseEntity.ok(paid);
+        } catch (Exception e) {
+            System.err.println("Error retrieving paid requests: " + e.getMessage());
+            return ResponseEntity.status(500).body(null);
+        }
+    }
 }

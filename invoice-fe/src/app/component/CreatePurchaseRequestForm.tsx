@@ -42,7 +42,7 @@ const CreatePurchaseRequestForm: React.FC<CreatePurchaseRequestFormProps> = ({ o
     const hideForm = () => setVisible(false)
 
     return (
-        <div className="mb-6">
+        <div style={{ padding: '20px' }}>
             <Button
                 type="primary"
                 icon={<PlusOutlined />}
@@ -54,7 +54,7 @@ const CreatePurchaseRequestForm: React.FC<CreatePurchaseRequestFormProps> = ({ o
             </Button>
 
             {visible && (
-                <Card title="Create New Purchase Request" className="mb-4">
+                <Card title="Create New Purchase Request" style={{marginTop: '20px'}}>
                     <Form
                         form={form}
                         layout="vertical"

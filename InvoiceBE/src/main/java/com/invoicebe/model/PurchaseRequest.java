@@ -57,8 +57,8 @@ public class PurchaseRequest {
 
     @NotBlank(message = "Status cannot be empty")
     @Pattern(
-        regexp = "PENDING|DELIVERED|CONVERTED_TO_INVOICE",
-        message = "Status must be 'PENDING', 'DELIVERED', or 'CONVERTED_TO_INVOICE'"
+        regexp = "PENDING|SHIPPED|PAID",
+        message = "Status must be 'PENDING', 'SHIPPED', or 'PAID'"
     )
     @Column(nullable = false)
     private String status;

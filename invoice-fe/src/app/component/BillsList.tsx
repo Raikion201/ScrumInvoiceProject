@@ -1,11 +1,9 @@
 'use client'
 
 import React, { useEffect } from 'react'
-import { Table, Button, Tag, Space, Popconfirm, Card, Typography } from 'antd'
+import { Table, Button, Tag, Space, Card, Typography } from 'antd'
 import {
-    CheckCircleOutlined,
-    FileTextOutlined,
-    DeleteOutlined,
+    DollarOutlined,
     EyeOutlined
 } from '@ant-design/icons'
 import { usePurchaseRequestStore } from '../store/purchaseRequestStore'
@@ -14,52 +12,25 @@ import dayjs from 'dayjs'
 
 const { Text, Title } = Typography
 
-interface PurchaseRequestListProps {
-    onViewDetails?: (request: PurchaseRequest) => void
+interface BillsListProps {
+    onViewDetails?: (bill: PurchaseRequest) => void
 }
 
-const PurchaseRequestList: React.FC<PurchaseRequestListProps> = ({ onViewDetails }) => {
+const BillsList: React.FC<BillsListProps> = ({ onViewDetails }) => {
     const {
-        purchaseRequests,
+        bills,
         loading,
-        fetchPurchaseRequests,
-        markAsShipped,
-        deletePurchaseRequest
+        fetchBills,
+        markAsPaid
     } = usePurchaseRequestStore()
 
     useEffect(() => {
-        fetchPurchaseRequests()
-    }, [fetchPurchaseRequests])
-
-    const getStatusColor = (status: string) => {
-        switch (status) {
-            case 'PENDING':
-                return 'orange'
-            case 'DELIVERED':
-                return 'blue'
-            case 'CONVERTED_TO_INVOICE':
-                return 'green'
-            default:
-                return 'default'
-        }
-    }
-
-    const getStatusText = (status: string) => {
-        switch (status) {
-            case 'PENDING':
-                return 'Pending'
-            case 'DELIVERED':
-                return 'Delivered'
-            case 'CONVERTED_TO_INVOICE':
-                return 'Converted to Invoice'
-            default:
-                return status
-        }
-    }
+        fetchBills()
+    }, [fetchBills])
 
     const columns = [
         {
-            title: 'Invoice #',
+            title: 'Bill #',
             dataIndex: 'invoiceNumber',
             key: 'invoiceNumber',
             render: (text: string) => <Text strong>{text}</Text>
@@ -109,9 +80,7 @@ const PurchaseRequestList: React.FC<PurchaseRequestListProps> = ({ onViewDetails
             dataIndex: 'status',
             key: 'status',
             render: (status: string) => (
-                <Tag color={getStatusColor(status)}>
-                    {getStatusText(status)}
-                </Tag>
+                <Tag color="blue">Shipped</Tag>
             )
         },
         {
@@ -125,44 +94,26 @@ const PurchaseRequestList: React.FC<PurchaseRequestListProps> = ({ onViewDetails
                         onClick={() => onViewDetails?.(record)}
                         title="View Details"
                     />
-
+                    
                     <Button
                         type="primary"
                         size="small"
-                        icon={<CheckCircleOutlined />}
-                        onClick={() => markAsShipped(record.id!)}
-                        title="Mark as Shipped"
+                        icon={<DollarOutlined />}
+                        onClick={() => markAsPaid(record.id!)}
+                        title="Mark as Paid"
                     >
-                        Mark as Shipped
+                        Set to Paid
                     </Button>
-
-                    <Popconfirm
-                        title="Delete Purchase Request"
-                        description="Are you sure you want to delete this purchase request?"
-                        onConfirm={() => deletePurchaseRequest(record.id!)}
-                        okText="Yes"
-                        cancelText="No"
-                    >
-                        <Button
-                            type="text"
-                            danger
-                            icon={<DeleteOutlined />}
-                            title="Delete"
-                        />
-                    </Popconfirm>
                 </Space>
             )
         }
     ]
 
-    // Additional safety filter to ensure only pending requests are displayed
-    const pendingRequests = purchaseRequests.filter(req => req.status === 'PENDING');
-
     return (
-        <Card title="Purchase Requests" className="mb-6">
+        <Card title="Bills (Shipped Requests)" className="mb-6">
             <Table
                 columns={columns}
-                dataSource={pendingRequests} // Use filtered requests here
+                dataSource={bills}
                 rowKey="id"
                 loading={loading}
                 pagination={{
@@ -178,4 +129,4 @@ const PurchaseRequestList: React.FC<PurchaseRequestListProps> = ({ onViewDetails
     )
 }
 
-export default PurchaseRequestList
+export default BillsList
