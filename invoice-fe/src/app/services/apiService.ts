@@ -28,6 +28,17 @@ export interface Invoice {
     purchaseRequest?: PurchaseRequest
 }
 
+// New interface for Bill model
+export interface Bill {
+    id?: number;
+    billNumber: string;
+    amount: number;
+    issueDate: string;
+    dueDate: string;
+    status: 'PENDING' | 'PAID';
+    purchaseRequest?: PurchaseRequest; // Include PurchaseRequest for supplier details
+}
+
 // Purchase Request API calls
 export const purchaseRequestAPI = {
     // Create new purchase request
@@ -101,4 +112,20 @@ export const invoiceAPI = {
         })
         return response.data
     }
-} 
+}
+
+// Bill API calls
+export const billAPI = {
+  getByPurchaseRequestId: async (purchaseRequestId: number): Promise<Bill> => {
+    const response = await api.get(`/api/bills/by-purchase-request/${purchaseRequestId}`);
+    return response.data;
+  },
+  getAll: async (): Promise<Bill[]> => {
+    const response = await api.get('/api/bills');
+    return response.data;
+  },
+  markAsPaid: async (id: number): Promise<Bill> => {
+    const response = await api.put(`/api/bills/${id}/mark-paid`);
+    return response.data;
+  }
+};

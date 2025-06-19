@@ -1,50 +1,74 @@
 'use client'
 import React, { useState, useEffect } from 'react';
 import { FileText, Download, Printer, Mail, Calendar, DollarSign, User, Building, CheckCircle, Clock, AlertCircle } from 'lucide-react';
-import api from '../ultils/axiosConfig';
-
+import { billAPI } from '../services/apiService';
+import axios from 'axios';
 const ViewBillComponent = () => {
-  const [selectedInvoice, setSelectedInvoice] = useState(null);
-  const [invoices, setInvoices] = useState([]);
+  const [selectedBill, setSelectedBill] = useState(null);
+  const [bills, setBills] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Fetch invoices from the backend API
+  // Fetch bills from the backend API
   useEffect(() => {
-    const fetchInvoices = async () => {
+    const fetchBills = async () => {
       try {
         setLoading(true);
-        const response = await api.get('/api/invoices');
+        
+        // Using the API client from your services
+        const response = await billAPI.getAll();
+        console.log('Bills fetched successfully:', response);
         
         // Transform the backend data to match the expected format
-        const transformedInvoices = response.data.map(invoice => ({
-          id: invoice.invoiceNumber,
-          supplierName: invoice.customerName,
-          supplierAddress: invoice.customerEmail || 'No address provided',
-          amount: invoice.amount,
+        const transformedBills = response.map(bill => ({
+          id: bill.billNumber || `BILL-${bill.id}`,
+          supplierName: bill.purchaseRequest ? bill.purchaseRequest.customerName : 'Unknown Supplier',
+          supplierAddress: bill.purchaseRequest ? bill.purchaseRequest.customerEmail : 'No address provided',
+          amount: bill.amount,
           currency: 'VND',
-          issueDate: invoice.invoiceDate,
-          dueDate: invoice.dueDate || invoice.invoiceDate,
-          status: invoice.paid ? 'paid' : (new Date(invoice.dueDate) < new Date() ? 'overdue' : 'pending'),
-          description: invoice.description || 'No description provided',
-          items: [], // Backend doesn't provide line items yet
-          purchaseRequest: `PR-${new Date().getFullYear()}-${invoice.id}`,
-          depositPaid: 0, // Backend doesn't provide deposit information yet
-          backendId: invoice.id // Keep track of the original ID for API operations
+          issueDate: bill.issueDate ? new Date(bill.issueDate).toLocaleDateString() : new Date().toLocaleDateString(),
+          dueDate: bill.dueDate ? new Date(bill.dueDate).toLocaleDateString() : new Date().toLocaleDateString(),
+          status: bill.status === 'PAID' ? 'paid' : 
+                  (new Date(bill.dueDate) < new Date() ? 'overdue' : 'pending'),
+          description: bill.purchaseRequest ? bill.purchaseRequest.description : 'No description provided',
+          purchaseRequest: `PR-${bill.purchaseRequest ? bill.purchaseRequest.id : bill.id}`,
+          depositPaid: bill.purchaseRequest && bill.purchaseRequest.depositAmount ? bill.purchaseRequest.depositAmount : 0,
+          backendId: bill.id
         }));
         
-        setInvoices(transformedInvoices);
+        setBills(transformedBills);
         setError(null);
       } catch (err) {
-        console.error('Error fetching invoices:', err);
-        setError('Failed to load invoices. Please try again later.');
+        console.error('Error fetching bills:', err);
+        setError('Failed to load bills. Please try again later.');
+        setBills([]);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchInvoices();
+    fetchBills();
   }, []);
+
+  // Function to mark bill as paid
+  const markAsPaid = async (billId) => {
+    try {
+      await billAPI.markAsPaid(billId);
+      
+      // Update local state
+      setBills(bills.map(bill => 
+        bill.backendId === billId ? { ...bill, status: 'paid' } : bill
+      ));
+      
+      if (selectedBill && selectedBill.backendId === billId) {
+        setSelectedBill({...selectedBill, status: 'paid'});
+      }
+      
+    } catch (err) {
+      console.error('Error updating bill:', err);
+      alert('Failed to update bill. Please try again.');
+    }
+  };
 
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat('vi-VN').format(amount) + ' ₫';
@@ -74,30 +98,6 @@ const ViewBillComponent = () => {
       case 'pending': return 'Pending';
       case 'overdue': return 'Overdue';
       default: return 'Unknown';
-    }
-  };
-
-  // Function to mark invoice as paid
-  const markAsPaid = async (invoiceId) => {
-    try {
-      const invoice = invoices.find(inv => inv.backendId === invoiceId);
-      if (!invoice) return;
-
-      const updatedInvoice = { ...invoice, paid: true };
-      await api.put(`/api/invoices/${invoiceId}`, updatedInvoice);
-
-      // Update local state
-      setInvoices(invoices.map(inv => 
-        inv.backendId === invoiceId ? { ...inv, status: 'paid' } : inv
-      ));
-      
-      if (selectedInvoice && selectedInvoice.backendId === invoiceId) {
-        setSelectedInvoice({...selectedInvoice, status: 'paid'});
-      }
-      
-    } catch (err) {
-      console.error('Error updating invoice:', err);
-      alert('Failed to update invoice. Please try again.');
     }
   };
 
@@ -138,7 +138,7 @@ const ViewBillComponent = () => {
 
         {/* Main content area */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '2rem' }}>
-          {/* Invoice List */}
+          {/* Bill List */}
           <div style={{ 
             backgroundColor: 'white', 
             borderRadius: '1rem', 
@@ -152,28 +152,32 @@ const ViewBillComponent = () => {
               <div style={{ textAlign: 'center', padding: '1rem 0' }}>Loading invoices...</div>
             ) : error ? (
               <div style={{ textAlign: 'center', padding: '1rem 0', color: '#EF4444' }}>{error}</div>
+            ) : bills.length === 0 ? (
+              <div style={{ textAlign: 'center', padding: '1rem 0', color: '#6B7280' }}>
+                No bills found. Bills will appear here once they are created.
+              </div>
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                {invoices.map(invoice => (
+                {bills.map(bill => (
                   <div
-                    key={invoice.backendId}
-                    onClick={() => setSelectedInvoice(invoice)}
+                    key={bill.backendId}
+                    onClick={() => setSelectedBill(bill)}
                     style={{ 
                       padding: '1rem', 
                       borderRadius: '0.75rem', 
                       cursor: 'pointer', 
                       transition: 'all 0.2s',
-                      backgroundColor: selectedInvoice && selectedInvoice.backendId === invoice.backendId ? '#EFF6FF' : '#F9FAFB',
-                      border: selectedInvoice && selectedInvoice.backendId === invoice.backendId ? '2px solid #BFDBFE' : '1px solid #E5E7EB',
+                      backgroundColor: selectedBill && selectedBill.backendId === bill.backendId ? '#EFF6FF' : '#F9FAFB',
+                      border: selectedBill && selectedBill.backendId === bill.backendId ? '2px solid #BFDBFE' : '1px solid #E5E7EB',
                     }}
                   >
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                       <div>
-                        <h3 style={{ fontWeight: '500', color: '#111827' }}>{invoice.id}</h3>
-                        <p style={{ fontSize: '0.875rem', color: '#4B5563' }}>{invoice.supplierName}</p>
+                        <h3 style={{ fontWeight: '500', color: '#111827' }}>{bill.id}</h3>
+                        <p style={{ fontSize: '0.875rem', color: '#4B5563' }}>{bill.supplierName}</p>
                       </div>
                       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
-                        <span style={{ fontWeight: '600' }}>{formatCurrency(invoice.amount)}</span>
+                        <span style={{ fontWeight: '600' }}>{formatCurrency(bill.amount)}</span>
                         <div style={{ 
                           fontSize: '0.75rem', 
                           display: 'flex', 
@@ -181,10 +185,10 @@ const ViewBillComponent = () => {
                           gap: '0.25rem', 
                           padding: '0.25rem 0.5rem', 
                           borderRadius: '9999px',
-                          ...getStatusStyle(invoice.status)
+                          ...getStatusStyle(bill.status)
                         }}>
-                          {getStatusIcon(invoice.status)}
-                          <span>{getStatusText(invoice.status)}</span>
+                          {getStatusIcon(bill.status)}
+                          <span>{getStatusText(bill.status)}</span>
                         </div>
                       </div>
                     </div>
@@ -194,23 +198,23 @@ const ViewBillComponent = () => {
             )}
           </div>
           
-          {/* Invoice Detail */}
+          {/* Bill Detail */}
           <div>
-            {selectedInvoice ? (
+            {selectedBill ? (
               <div style={{ 
                 backgroundColor: 'white', 
                 borderRadius: '1rem', 
                 boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)', 
                 border: '1px solid #F3F4F6' 
               }}>
-                {/* Invoice Header */}
+                {/* Bill Header */}
                 <div style={{ padding: '1.5rem', borderBottom: '1px solid #E5E7EB' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <div>
-                      <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#1F2937' }}>{selectedInvoice.id}</h2>
+                      <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#1F2937' }}>{selectedBill.id}</h2>
                       <div style={{ display: 'flex', alignItems: 'center', marginTop: '0.25rem', fontSize: '0.875rem', color: '#4B5563' }}>
                         <Calendar style={{ width: '1rem', height: '1rem', marginRight: '0.25rem' }} />
-                        <span>Issued: {selectedInvoice.issueDate}</span>
+                        <span>Issued: {selectedBill.issueDate}</span>
                       </div>
                     </div>
                     <div style={{ 
@@ -219,15 +223,15 @@ const ViewBillComponent = () => {
                       display: 'flex', 
                       alignItems: 'center', 
                       gap: '0.25rem',
-                      ...getStatusStyle(selectedInvoice.status)
+                      ...getStatusStyle(selectedBill.status)
                     }}>
-                      {getStatusIcon(selectedInvoice.status)}
-                      <span style={{ fontWeight: '500' }}>{getStatusText(selectedInvoice.status)}</span>
+                      {getStatusIcon(selectedBill.status)}
+                      <span style={{ fontWeight: '500' }}>{getStatusText(selectedBill.status)}</span>
                     </div>
                   </div>
                 </div>
                 
-                {/* Invoice Actions */}
+                {/* Bill Actions */}
                 <div style={{ 
                   padding: '1rem', 
                   backgroundColor: '#F9FAFB', 
@@ -236,9 +240,9 @@ const ViewBillComponent = () => {
                   gap: '0.5rem',
                   justifyContent: 'flex-end' 
                 }}>
-                  {selectedInvoice.status !== 'paid' && (
+                  {selectedBill.status !== 'paid' && (
                     <button 
-                      onClick={() => markAsPaid(selectedInvoice.backendId)}
+                      onClick={() => markAsPaid(selectedBill.backendId)}
                       style={{ 
                         backgroundColor: '#059669', 
                         color: 'white', 
@@ -311,7 +315,7 @@ const ViewBillComponent = () => {
                   </button>
                 </div>
                 
-                {/* Invoice Details */}
+                {/* Bill Details */}
                 <div style={{ 
                   padding: '1.5rem', 
                   display: 'grid', 
@@ -330,8 +334,8 @@ const ViewBillComponent = () => {
                       Supplier Details
                     </h3>
                     <div style={{ backgroundColor: '#F9FAFB', padding: '1rem', borderRadius: '0.5rem' }}>
-                      <p style={{ fontWeight: '600', color: '#1F2937' }}>{selectedInvoice.supplierName}</p>
-                      <p style={{ color: '#4B5563', fontSize: '0.875rem', marginTop: '0.25rem' }}>{selectedInvoice.supplierAddress}</p>
+                      <p style={{ fontWeight: '600', color: '#1F2937' }}>{selectedBill.supplierName}</p>
+                      <p style={{ color: '#4B5563', fontSize: '0.875rem', marginTop: '0.25rem' }}>{selectedBill.supplierAddress}</p>
                     </div>
                   </div>
                   <div>
@@ -348,44 +352,44 @@ const ViewBillComponent = () => {
                     <div style={{ backgroundColor: '#F9FAFB', padding: '1rem', borderRadius: '0.5rem' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                         <span style={{ color: '#4B5563' }}>Issue Date:</span>
-                        <span style={{ fontWeight: '500' }}>{selectedInvoice.issueDate}</span>
+                        <span style={{ fontWeight: '500' }}>{selectedBill.issueDate}</span>
                       </div>
                       <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '0.5rem' }}>
                         <span style={{ color: '#4B5563' }}>Due Date:</span>
-                        <span style={{ fontWeight: '500' }}>{selectedInvoice.dueDate}</span>
+                        <span style={{ fontWeight: '500' }}>{selectedBill.dueDate}</span>
                       </div>
                     </div>
                   </div>
 
-                  {/* Invoice Description */}
+                  {/* Bill Description */}
                   <div>
                     <h3 style={{ color: '#4B5563', fontWeight: '500', marginBottom: '0.5rem' }}>Description</h3>
                     <div style={{ backgroundColor: '#F9FAFB', padding: '1rem', borderRadius: '0.5rem' }}>
-                      <p style={{ color: '#1F2937' }}>{selectedInvoice.description}</p>
+                      <p style={{ color: '#1F2937' }}>{selectedBill.description}</p>
                     </div>
                   </div>
                   
-                  {/* Invoice Items */}
+                  {/* Purchase Request */}
                   <div>
                     <h3 style={{ color: '#4B5563', fontWeight: '500', marginBottom: '0.5rem' }}>Purchase Request</h3>
                     <div style={{ backgroundColor: '#F9FAFB', padding: '1rem', borderRadius: '0.5rem' }}>
-                      <p style={{ color: '#1F2937' }}>{selectedInvoice.purchaseRequest}</p>
+                      <p style={{ color: '#1F2937' }}>{selectedBill.purchaseRequest}</p>
                     </div>
                   </div>
                 </div>
                 
-                {/* Invoice Total */}
+                {/* Bill Total */}
                 <div style={{ padding: '1.5rem', borderTop: '1px solid #E5E7EB' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <span style={{ fontSize: '1.125rem', color: '#4B5563' }}>Total Amount:</span>
-                    <span style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#111827' }}>{formatCurrency(selectedInvoice.amount)}</span>
+                    <span style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#111827' }}>{formatCurrency(selectedBill.amount)}</span>
                   </div>
                   
-                  {selectedInvoice.depositPaid > 0 && (
+                  {selectedBill.depositPaid > 0 && (
                     <>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '0.5rem' }}>
                         <span style={{ color: '#4B5563' }}>Deposit Paid:</span>
-                        <span style={{ fontWeight: '500', color: '#059669' }}>{formatCurrency(selectedInvoice.depositPaid)}</span>
+                        <span style={{ fontWeight: '500', color: '#059669' }}>{formatCurrency(selectedBill.depositPaid)}</span>
                       </div>
                       <div style={{ 
                         display: 'flex', 
@@ -396,7 +400,7 @@ const ViewBillComponent = () => {
                         borderTop: '1px solid #E5E7EB' 
                       }}>
                         <span style={{ color: '#4B5563' }}>Balance Due:</span>
-                        <span style={{ fontWeight: 'bold', color: '#DC2626' }}>{formatCurrency(selectedInvoice.amount - selectedInvoice.depositPaid)}</span>
+                        <span style={{ fontWeight: 'bold', color: '#DC2626' }}>{formatCurrency(selectedBill.amount - selectedBill.depositPaid)}</span>
                       </div>
                     </>
                   )}
@@ -427,3 +431,4 @@ const ViewBillComponent = () => {
 };
 
 export default ViewBillComponent;
+
