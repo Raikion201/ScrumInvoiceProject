@@ -17,7 +17,7 @@ const LoginForm = () => {
             localStorage.setItem('username', values.username);
             window.dispatchEvent(new Event('usernameChanged'));
             message.success(res.data.message || 'Login successful!');
-            router.push('/');
+            router.push('/purchase-requests');
         } catch (error) {
             message.error(error.response?.data?.message || 'Login failed!');
         }
