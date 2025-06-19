@@ -14,7 +14,7 @@ const Header = () => {
 
     const items = [
         {
-            label: 'Trang chủ',
+            label: 'Home',
             key: '/',
         },
         {
@@ -61,10 +61,10 @@ const Header = () => {
                 <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
                     <Space>
                         <Button type="text" onClick={() => router.push('/login')}>
-                            Đăng nhập
+                            Login
                         </Button>
                         <Button type="primary" onClick={() => router.push('/register')}>
-                            Đăng ký
+                            Register
                         </Button>
                     </Space>
                 </div>
