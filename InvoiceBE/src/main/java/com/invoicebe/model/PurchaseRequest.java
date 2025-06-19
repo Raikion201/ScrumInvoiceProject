@@ -11,11 +11,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Builder;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-
-import com.fasterxml.jackson.annotation.JsonIgnore; // <-- Import this!
 
 @Entity
 @Table(name = "purchase_requests")
@@ -24,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore; // <-- Import this!
 @AllArgsConstructor
 @Builder
 public class PurchaseRequest {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -56,7 +56,10 @@ public class PurchaseRequest {
     private LocalDate dueDate;
 
     @NotBlank(message = "Status cannot be empty")
-    @Pattern(regexp = "PENDING|DELIVERED|CONVERTED_TO_INVOICE", message = "Status must be 'PENDING', 'DELIVERED', or 'CONVERTED_TO_INVOICE'")
+    @Pattern(
+        regexp = "PENDING|DELIVERED|CONVERTED_TO_INVOICE",
+        message = "Status must be 'PENDING', 'DELIVERED', or 'CONVERTED_TO_INVOICE'"
+    )
     @Column(nullable = false)
     private String status;
 
@@ -72,8 +75,8 @@ public class PurchaseRequest {
     @Column(nullable = false, unique = true)
     private String invoiceNumber;
 
-    // --- NEW RELATIONSHIP MAPPING ---
+    // Break the circular reference for JSON serialization
+    @JsonManagedReference
     @OneToOne(mappedBy = "purchaseRequest", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonIgnore // <-- Add this annotation!
-    private Invoice invoice; // The Invoice object linked to this PurchaseRequest
+    private Invoice invoice;
 }

@@ -173,6 +173,7 @@ const PurchaseRequestList: React.FC<PurchaseRequestListProps> = ({ onViewDetails
     ]
 
     return (
+      
         <Card title="Purchase Requests" className="mb-6">
             <Table
                 columns={columns}

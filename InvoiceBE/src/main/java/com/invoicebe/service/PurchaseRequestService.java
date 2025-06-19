@@ -6,8 +6,13 @@ import com.invoicebe.repository.PurchaseRequestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class PurchaseRequestService {
@@ -127,5 +132,127 @@ public class PurchaseRequestService {
 
             return createdInvoice;
         });
+    }
+
+    /**
+     * Retrieves purchase requests based on provided filters.
+     *
+     * @param status The status to filter by (can be null for no filtering)
+     * @param startDueDate The start date for due date filtering (can be null)
+     * @param endDueDate The end date for due date filtering (can be null)
+     * @param isPaid Filter by payment status (can be null)
+     * @return A list of PurchaseRequest objects matching the filter criteria
+     */
+    public List<PurchaseRequest> getPurchaseRequests(String status, LocalDate startDueDate, LocalDate endDueDate, Boolean isPaid) {
+        return purchaseRequestRepository.findByFilters(status, startDueDate, endDueDate, isPaid);
+    }
+
+    /**
+     * Marks a purchase request as delivered and optionally converts it to an invoice.
+     *
+     * @param id The ID of the purchase request to mark as delivered.
+     * @return An Optional containing the updated PurchaseRequest if found, or empty if not.
+     */
+    public Optional<PurchaseRequest> markAsDelivered(Long id) {
+        return purchaseRequestRepository.findById(id).map(req -> {
+            if (!"DELIVERED".equals(req.getStatus())) {
+                req.setStatus("DELIVERED");
+                
+                // Auto-generate invoice if not exists
+                if (req.getInvoiceNumber() == null || req.getInvoiceNumber().isEmpty()) {
+                    // Convert to invoice
+                    convertPurchaseRequestToInvoice(id);
+                }
+            }
+            return purchaseRequestRepository.save(req);
+        });
+    }
+
+    /**
+     * Automatically generates a bill for a delivered purchase request.
+     *
+     * @param id The ID of the purchase request for which to generate a bill.
+     * @return An Optional containing the updated PurchaseRequest if found and status is DELIVERED,
+     *         or empty if not found or not in DELIVERED status.
+     */
+    public Optional<PurchaseRequest> autoGenerateBill(Long id) {
+        return purchaseRequestRepository.findById(id).map(req -> {
+            if (!"DELIVERED".equalsIgnoreCase(req.getStatus())) {
+                return null; // Not in correct status
+            }
+            
+            // Generate invoice number
+            String invoiceNumber = "INV-" + req.getId() + "-" + LocalDate.now().toString().replaceAll("-", "");
+            req.setInvoiceNumber(invoiceNumber);
+            req.setInvoiceDate(LocalDate.now());
+            req.setIsPaid(true);
+            return purchaseRequestRepository.save(req);
+        });
+    }
+
+    /**
+     * Retrieves dashboard statistics for purchase requests.
+     * 
+     * @return A map containing various statistics for the dashboard.
+     */
+    public Map<String, Object> getDashboardStatistics() {
+        System.out.println("Calculating purchase request statistics for dashboard");
+        
+        List<PurchaseRequest> allRequests = purchaseRequestRepository.findAll();
+        
+        System.out.println("Total purchase requests: " + allRequests.size());
+        
+        Map<String, Object> statistics = new HashMap<>();
+        
+        // Count by status
+        Map<String, Long> countByStatus = allRequests.stream()
+                .collect(Collectors.groupingBy(
+                        PurchaseRequest::getStatus,
+                        Collectors.counting()
+                ));
+        statistics.put("countByStatus", countByStatus);
+        System.out.println("Request count by status: " + countByStatus);
+        
+        // Calculate total amount
+        BigDecimal totalAmount = allRequests.stream()
+                .map(PurchaseRequest::getTotalAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        statistics.put("totalAmount", totalAmount);
+        System.out.println("Total amount of all requests: " + totalAmount);
+        
+        // Calculate paid amount
+        BigDecimal paidAmount = allRequests.stream()
+                .filter(PurchaseRequest::getIsPaid)
+                .map(PurchaseRequest::getTotalAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        statistics.put("paidAmount", paidAmount);
+        System.out.println("Total paid amount: " + paidAmount);
+        
+        // Count overdue requests
+        LocalDate today = LocalDate.now();
+        long overdueCount = allRequests.stream()
+                .filter(req -> "PENDING".equals(req.getStatus()))
+                .filter(req -> req.getDueDate().isBefore(today))
+                .count();
+        statistics.put("overdueCount", overdueCount);
+        System.out.println("Overdue requests: " + overdueCount);
+        
+        // Recent requests (last 7 days)
+        LocalDate weekAgo = today.minusDays(7);
+        List<PurchaseRequest> recentRequests = allRequests.stream()
+                .filter(req -> req.getInvoiceDate().isAfter(weekAgo))
+                .collect(Collectors.toList());
+        statistics.put("recentRequestsCount", recentRequests.size());
+        System.out.println("Recent requests (last 7 days): " + recentRequests.size());
+        
+        // Get 5 most recent requests for display
+        List<PurchaseRequest> latestRequests = allRequests.stream()
+                .sorted((r1, r2) -> r2.getInvoiceDate().compareTo(r1.getInvoiceDate()))
+                .limit(5)
+                .collect(Collectors.toList());
+        statistics.put("latestRequests", latestRequests);
+        System.out.println("Latest 5 requests retrieved for dashboard");
+        
+        return statistics;
     }
 }

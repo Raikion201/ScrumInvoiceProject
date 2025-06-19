@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { purchaseRequestAPI, invoiceAPI, PurchaseRequest, Invoice } from '../services/apiService'
+import { purchaseRequestAPI, invoiceAPI, fetchDashboardStatistics, PurchaseRequest, Invoice, DashboardStatistics } from '../services/apiService'
 import { toast } from 'sonner'
 
 interface PurchaseRequestState {
@@ -7,6 +7,7 @@ interface PurchaseRequestState {
     invoices: Invoice[]
     loading: boolean
     error: string | null
+    dashboardStats: DashboardStatistics | null
 
     // Actions
     fetchPurchaseRequests: () => Promise<void>
@@ -18,6 +19,7 @@ interface PurchaseRequestState {
 
     fetchInvoices: () => Promise<void>
     markInvoiceAsPaid: (id: number) => Promise<void>
+    fetchDashboardStatistics: () => Promise<void>
 
     setLoading: (loading: boolean) => void
     setError: (error: string | null) => void
@@ -28,6 +30,7 @@ export const usePurchaseRequestStore = create<PurchaseRequestState>((set, get) =
     invoices: [],
     loading: false,
     error: null,
+    dashboardStats: null,
 
     setLoading: (loading) => set({ loading }),
     setError: (error) => set({ error }),
@@ -36,11 +39,14 @@ export const usePurchaseRequestStore = create<PurchaseRequestState>((set, get) =
         try {
             set({ loading: true, error: null })
             const data = await purchaseRequestAPI.getAll()
-            set({ purchaseRequests: data })
+            console.log('Store: Updated purchase requests state with:', data)
+            set({ purchaseRequests: Array.isArray(data) ? data : [] })
         } catch (error) {
             const errorMessage = error instanceof Error ? error.message : 'Failed to fetch purchase requests'
             set({ error: errorMessage })
             toast.error(errorMessage)
+            // Always ensure we have a valid array even on error
+            set(state => ({ purchaseRequests: Array.isArray(state.purchaseRequests) ? state.purchaseRequests : [] }))
         } finally {
             set({ loading: false })
         }
@@ -50,6 +56,7 @@ export const usePurchaseRequestStore = create<PurchaseRequestState>((set, get) =
         try {
             set({ loading: true, error: null })
             const newRequest = await purchaseRequestAPI.create(data)
+            console.log('Store: Added new purchase request to state:', newRequest)
             set((state) => ({
                 purchaseRequests: [...state.purchaseRequests, newRequest]
             }))
@@ -67,6 +74,7 @@ export const usePurchaseRequestStore = create<PurchaseRequestState>((set, get) =
         try {
             set({ loading: true, error: null })
             const updatedRequest = await purchaseRequestAPI.update(id, data)
+            console.log('Store: Updated purchase request in state:', updatedRequest)
             set((state) => ({
                 purchaseRequests: state.purchaseRequests.map(req =>
                     req.id === id ? updatedRequest : req
@@ -142,11 +150,13 @@ export const usePurchaseRequestStore = create<PurchaseRequestState>((set, get) =
         try {
             set({ loading: true, error: null })
             const data = await invoiceAPI.getAll()
-            set({ invoices: data })
+            set({ invoices: Array.isArray(data) ? data : [] })
         } catch (error) {
             const errorMessage = error instanceof Error ? error.message : 'Failed to fetch invoices'
             set({ error: errorMessage })
             toast.error(errorMessage)
+            // Always ensure we have a valid array even on error
+            set(state => ({ invoices: Array.isArray(state.invoices) ? state.invoices : [] }))
         } finally {
             set({ loading: false })
         }
@@ -169,5 +179,20 @@ export const usePurchaseRequestStore = create<PurchaseRequestState>((set, get) =
         } finally {
             set({ loading: false })
         }
+    },
+
+    fetchDashboardStatistics: async () => {
+        set({ loading: true, error: null })
+        try {
+            const statistics = await fetchDashboardStatistics()
+            set({ dashboardStats: statistics, loading: false })
+            console.log("Dashboard statistics loaded successfully")
+        } catch (error) {
+            console.error("Error fetching dashboard statistics:", error)
+            set({ 
+                error: error instanceof Error ? error.message : 'Unknown error fetching dashboard statistics', 
+                loading: false 
+            })
+        }
     }
-})) 
+}))

@@ -28,6 +28,20 @@ export interface Invoice {
     purchaseRequest?: PurchaseRequest
 }
 
+// Define the dashboard statistics interface
+export interface DashboardStatistics {
+  countByStatus: {
+    PENDING?: number;
+    DELIVERED?: number;
+    CONVERTED_TO_INVOICE?: number;
+  };
+  totalAmount: number;
+  paidAmount: number;
+  overdueCount: number;
+  recentRequestsCount: number;
+  latestRequests: PurchaseRequest[];
+}
+
 // Purchase Request API calls
 export const purchaseRequestAPI = {
     // Create new purchase request
@@ -71,6 +85,14 @@ export const purchaseRequestAPI = {
     convertToInvoice: async (id: number): Promise<Invoice> => {
         const response = await api.put(`/purchase-requests/${id}/convert-to-invoice`)
         return response.data
+    },
+
+    // Get dashboard statistics
+    getDashboardStatistics: async (): Promise<DashboardStatistics> => {
+        console.log('Fetching dashboard statistics...')
+        const response = await api.get('/purchase-requests/dashboard')
+        console.log('Dashboard statistics received:', response.data)
+        return response.data
     }
 }
 
@@ -101,4 +123,28 @@ export const invoiceAPI = {
         })
         return response.data
     }
-} 
+}
+
+// Fetch dashboard statistics
+export const fetchDashboardStatistics = async (): Promise<DashboardStatistics> => {
+  try {
+    console.log('Fetching dashboard statistics');
+    const response = await fetch(`http://localhost:8080/purchase-requests/dashboard`, {
+      headers: {
+        'Content-Type': 'application/json',
+        // Add auth headers if needed
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch dashboard statistics: ${response.status}`);
+    }
+
+    const data = await response.json();
+    console.log('Dashboard statistics fetched successfully:', data);
+    return data;
+  } catch (error) {
+    console.error('Error fetching dashboard statistics:', error);
+    throw error;
+  }
+};
