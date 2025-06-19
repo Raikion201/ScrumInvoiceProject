@@ -26,3 +26,4 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder(); // Use BCrypt for strong password hashing
     }
 }
+    
