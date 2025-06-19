@@ -2,15 +2,10 @@ package com.invoicebe.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-<<<<<<< HEAD
-import lombok.Data;
-import lombok.NoArgsConstructor;
-=======
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import com.fasterxml.jackson.annotation.JsonBackReference;
->>>>>>> Purchase-Request-2
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -20,33 +15,6 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-<<<<<<< HEAD
-public class Invoice {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long id;
-    
-    @Column(nullable = false)
-    public String invoiceNumber;
-    
-    @Column(nullable = false)
-    public String customerName;
-    
-    public String customerEmail;
-    
-    @Column(nullable = false)
-    public BigDecimal amount;
-    
-    @Column(nullable = false)
-    public LocalDate invoiceDate;
-    
-    public LocalDate dueDate;
-    
-    @Column(columnDefinition = "TEXT")
-    public String description;
-    
-    public boolean paid;
-=======
 @Builder
 public class Invoice {
     @Id
@@ -82,5 +50,4 @@ public class Invoice {
     @OneToOne
     @JoinColumn(name = "purchase_request_id")
     private PurchaseRequest purchaseRequest;
->>>>>>> Purchase-Request-2
 }

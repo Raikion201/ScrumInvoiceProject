@@ -18,8 +18,4 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowCredentials(true)
                 .maxAge(3600); // 1 hour max age
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> Purchase-Request-2
