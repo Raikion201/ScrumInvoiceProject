@@ -15,23 +15,23 @@ const Footer = () => {
                     <Col xs={24} sm={12} md={8}>
                         <Title level={4} style={{ color: 'white' }}>Invoice Purchase</Title>
                         <Paragraph style={{ color: '#d9d9d9' }}>
-                            Công cụ quản lý hóa đơn mua hàng thông minh, giúp bạn kiểm soát chi tiêu và lưu trữ hóa đơn dễ dàng, an toàn.
+                            A smart invoice management tool that helps you control your spending and store invoices easily and securely.
                         </Paragraph>
                     </Col>
 
                     <Col xs={24} sm={12} md={8}>
-                        <Title level={4} style={{ color: 'white' }}>Đường dẫn nhanh</Title>
+                        <Title level={4} style={{ color: 'white' }}>Quick Links</Title>
                         <div style={{ display: 'flex', flexDirection: 'column' }}>
-                            <Button type="link" style={{ color: '#d9d9d9', padding: '4px 0', textAlign: 'left', height: 'auto' }} onClick={() => router.push('/')}>Trang chủ</Button>
-                            <Button type="link" style={{ color: '#d9d9d9', padding: '4px 0', textAlign: 'left', height: 'auto' }} onClick={() => router.push('/invoices')}>Quản lý hóa đơn</Button>
-                            <Button type="link" style={{ color: '#d9d9d9', padding: '4px 0', textAlign: 'left', height: 'auto' }} onClick={() => router.push('/about')}>Giới thiệu</Button>
+                            <Button type="link" style={{ color: '#d9d9d9', padding: '4px 0', textAlign: 'left', height: 'auto' }} onClick={() => router.push('/')}>Home</Button>
+                            <Button type="link" style={{ color: '#d9d9d9', padding: '4px 0', textAlign: 'left', height: 'auto' }} onClick={() => router.push('/invoices')}>Invoice Management</Button>
+                            <Button type="link" style={{ color: '#d9d9d9', padding: '4px 0', textAlign: 'left', height: 'auto' }} onClick={() => router.push('/about')}>About</Button>
                         </div>
                     </Col>
 
                     <Col xs={24} sm={12} md={8}>
-                        <Title level={4} style={{ color: 'white' }}>Liên hệ</Title>
+                        <Title level={4} style={{ color: 'white' }}>Contact</Title>
                         <Paragraph style={{ color: '#d9d9d9' }}>
-                            Mọi thắc mắc hoặc góp ý, vui lòng liên hệ với chúng tôi qua email:
+                            For any questions or feedback, please contact us via email:
                         </Paragraph>
                         <Button type="primary" style={{ background: '#52c41a', borderColor: '#52c41a' }} onClick={() => window.open('mailto:support@invoicepurchase.com', '_blank')}>
                             support@invoicepurchase.com
