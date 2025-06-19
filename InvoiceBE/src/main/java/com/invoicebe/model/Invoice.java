@@ -2,8 +2,10 @@ package com.invoicebe.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -13,29 +15,39 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Invoice {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long id;
+    private Long id;
+    
+    @Column(nullable = false, unique = true)
+    private String invoiceNumber;
     
     @Column(nullable = false)
-    public String invoiceNumber;
+    private String customerName;
     
     @Column(nullable = false)
-    public String customerName;
-    
-    public String customerEmail;
+    private String customerEmail;
     
     @Column(nullable = false)
-    public BigDecimal amount;
+    private BigDecimal amount;
     
     @Column(nullable = false)
-    public LocalDate invoiceDate;
+    private LocalDate invoiceDate;
     
-    public LocalDate dueDate;
+    @Column(nullable = false)
+    private LocalDate dueDate;
     
-    @Column(columnDefinition = "TEXT")
-    public String description;
+    @Column
+    private String description;
     
-    public boolean paid;
+    @Column(nullable = false)
+    private Boolean paid;
+    
+    // Break the circular reference with @JsonBackReference
+    @JsonBackReference
+    @OneToOne
+    @JoinColumn(name = "purchase_request_id")
+    private PurchaseRequest purchaseRequest;
 }

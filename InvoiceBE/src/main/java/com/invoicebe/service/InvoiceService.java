@@ -11,56 +11,40 @@ import java.util.Optional;
 
 @Service
 public class InvoiceService {
+
     private final InvoiceRepository invoiceRepository;
-    
+
     @Autowired
     public InvoiceService(InvoiceRepository invoiceRepository) {
         this.invoiceRepository = invoiceRepository;
     }
-    
+
     public List<Invoice> getAllInvoices() {
         return invoiceRepository.findAll();
     }
-    
+
     public Optional<Invoice> getInvoiceById(Long id) {
         return invoiceRepository.findById(id);
     }
-    
+
     public Invoice createInvoice(Invoice invoice) {
         return invoiceRepository.save(invoice);
     }
-    
-    public Optional<Invoice> updateInvoice(Long id, Invoice invoiceDetails) {
-        return invoiceRepository.findById(id)
-                .map(existingInvoice -> {
-                    // Direct field access instead of using getters
-                    if (invoiceDetails.invoiceNumber != null) {
-                        existingInvoice.invoiceNumber = invoiceDetails.invoiceNumber;
-                    }
-                    if (invoiceDetails.customerName != null) {
-                        existingInvoice.customerName = invoiceDetails.customerName;
-                    }
-                    if (invoiceDetails.customerEmail != null) {
-                        existingInvoice.customerEmail = invoiceDetails.customerEmail;
-                    }
-                    if (invoiceDetails.amount != null) {
-                        existingInvoice.amount = invoiceDetails.amount;
-                    }
-                    if (invoiceDetails.invoiceDate != null) {
-                        existingInvoice.invoiceDate = invoiceDetails.invoiceDate;
-                    }
-                    if (invoiceDetails.dueDate != null) {
-                        existingInvoice.dueDate = invoiceDetails.dueDate;
-                    }
-                    if (invoiceDetails.description != null) {
-                        existingInvoice.description = invoiceDetails.description;
-                    }
-                    existingInvoice.paid = invoiceDetails.paid;
-                    
-                    return invoiceRepository.save(existingInvoice);
-                });
+
+    public Optional<Invoice> updateInvoice(Long id, Invoice updatedInvoice) {
+        return invoiceRepository.findById(id).map(existingInvoice -> {
+            existingInvoice.setInvoiceNumber(updatedInvoice.getInvoiceNumber());
+            existingInvoice.setCustomerName(updatedInvoice.getCustomerName());
+            existingInvoice.setCustomerEmail(updatedInvoice.getCustomerEmail());
+            existingInvoice.setAmount(updatedInvoice.getAmount());
+            existingInvoice.setInvoiceDate(updatedInvoice.getInvoiceDate());
+            existingInvoice.setDueDate(updatedInvoice.getDueDate());
+            existingInvoice.setDescription(updatedInvoice.getDescription());
+            existingInvoice.setPaid(updatedInvoice.getPaid());
+            return invoiceRepository.save(existingInvoice);
+        });
     }
-    
+
     public boolean deleteInvoice(Long id) {
         if (invoiceRepository.existsById(id)) {
             invoiceRepository.deleteById(id);

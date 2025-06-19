@@ -1,8 +1,8 @@
 import axios from 'axios'
 
-// tao mot instance cua axios voi cau hinh mac dinh
+// Create axios instance with default configuration
 const api = axios.create({
-  baseURL: 'http://localhost:8080/api', // Thay thế bằng URL API của bạn
+  baseURL: 'http://localhost:8080/api', // Backend API URL
   headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json',
@@ -10,29 +10,26 @@ const api = axios.create({
   withCredentials: false, // Set to true if you need to include credentials
 })
 
-// Request interceptor
+// Add request interceptor for logging
 api.interceptors.request.use(
   (config) => {
-    // You can add auth tokens here if needed
+    console.log('API Request:', config.method?.toUpperCase(), config.url)
     return config
   },
   (error) => {
     return Promise.reject(error)
-  },
+  }
 )
 
-// Response interceptor
+// Add response interceptor for error handling
 api.interceptors.response.use(
   (response) => {
     return response
   },
   (error) => {
-    if (error.message === 'Network Error') {
-      console.error('CORS or network error occurred.')
-      // You could dispatch a notification action here
-    }
+    console.error('API Error:', error.response?.data || error.message)
     return Promise.reject(error)
-  },
+  }
 )
 
 export default api
