@@ -50,12 +50,12 @@ const ViewBillComponent = () => {
     return new Intl.NumberFormat('vi-VN').format(amount) + ' ₫';
   };
 
-  const getStatusColor = (status) => {
+  const getStatusStyle = (status) => {
     switch (status) {
-      case 'paid': return 'text-green-600 bg-green-100';
-      case 'pending': return 'text-yellow-600 bg-yellow-100';
-      case 'overdue': return 'text-red-600 bg-red-100';
-      default: return 'text-gray-600 bg-gray-100';
+      case 'paid': return { color: '#059669', backgroundColor: '#ECFDF5' };
+      case 'pending': return { color: '#D97706', backgroundColor: '#FEF3C7' };
+      case 'overdue': return { color: '#DC2626', backgroundColor: '#FEE2E2' };
+      default: return { color: '#4B5563', backgroundColor: '#F3F4F6' };
     }
   };
 
@@ -102,182 +102,321 @@ const ViewBillComponent = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
-      <div className="container mx-auto px-4 py-8">
+    <div style={{ 
+      minHeight: '100vh', 
+      background: 'linear-gradient(to bottom right, #EFF6FF, #FFFFFF, #F5F3FF)' 
+    }}>
+      <div style={{ 
+        maxWidth: '1200px', 
+        margin: '0 auto', 
+        padding: '2rem 1rem' 
+      }}>
         {/* Header */}
-        <div className="mb-8">
-          <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
-            <div className="flex items-center gap-4 mb-4">
-              <div className="p-3 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl">
-                <FileText className="w-8 h-8 text-white" />
+        <div style={{ marginBottom: '2rem' }}>
+          <div style={{ 
+            backgroundColor: 'white', 
+            borderRadius: '1rem', 
+            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)', 
+            padding: '1.5rem', 
+            border: '1px solid #F3F4F6' 
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
+              <div style={{ 
+                padding: '0.75rem', 
+                background: 'linear-gradient(to right, #2563EB, #9333EA)', 
+                borderRadius: '0.75rem' 
+              }}>
+                <FileText style={{ width: '2rem', height: '2rem', color: 'white' }} />
               </div>
               <div>
-                <h1 className="text-3xl font-bold text-gray-800">Invoice Management System</h1>
-                <p className="text-gray-600 mt-1">Manage and track invoices from suppliers</p>
+                <h1 style={{ fontSize: '1.875rem', fontWeight: 'bold', color: '#1F2937' }}>Invoice Management System</h1>
+                <p style={{ color: '#4B5563', marginTop: '0.25rem' }}>Manage and track invoices from suppliers</p>
               </div>
             </div>
           </div>
         </div>
 
         {/* Main content area */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Invoice List - takes 1/3 width on large screens */}
-          <div className="lg:col-span-1">
-            <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
-              <h2 className="text-xl font-bold mb-4 text-gray-800">Invoice List</h2>
-              
-              {loading ? (
-                <div className="text-center py-4">Loading invoices...</div>
-              ) : error ? (
-                <div className="text-center py-4 text-red-500">{error}</div>
-              ) : (
-                <div className="space-y-3">
-                  {invoices.map(invoice => (
-                    <div
-                      key={invoice.backendId}
-                      onClick={() => setSelectedInvoice(invoice)}
-                      className={`p-4 rounded-xl cursor-pointer transition-all ${
-                        selectedInvoice && selectedInvoice.backendId === invoice.backendId
-                          ? 'bg-blue-50 border-blue-200 border-2'
-                          : 'bg-gray-50 hover:bg-gray-100 border border-gray-200'
-                      }`}
-                    >
-                      <div className="flex justify-between items-center">
-                        <div>
-                          <h3 className="font-medium text-gray-900">{invoice.id}</h3>
-                          <p className="text-sm text-gray-600">{invoice.supplierName}</p>
-                        </div>
-                        <div className="flex flex-col items-end">
-                          <span className="font-semibold">{formatCurrency(invoice.amount)}</span>
-                          <div className={`text-xs flex items-center gap-1 px-2 py-1 rounded-full ${getStatusColor(invoice.status)}`}>
-                            {getStatusIcon(invoice.status)}
-                            <span>{getStatusText(invoice.status)}</span>
-                          </div>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '2rem' }}>
+          {/* Invoice List */}
+          <div style={{ 
+            backgroundColor: 'white', 
+            borderRadius: '1rem', 
+            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)', 
+            padding: '1.5rem', 
+            border: '1px solid #F3F4F6' 
+          }}>
+            <h2 style={{ fontSize: '1.25rem', fontWeight: 'bold', marginBottom: '1rem', color: '#1F2937' }}>Invoice List</h2>
+            
+            {loading ? (
+              <div style={{ textAlign: 'center', padding: '1rem 0' }}>Loading invoices...</div>
+            ) : error ? (
+              <div style={{ textAlign: 'center', padding: '1rem 0', color: '#EF4444' }}>{error}</div>
+            ) : (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                {invoices.map(invoice => (
+                  <div
+                    key={invoice.backendId}
+                    onClick={() => setSelectedInvoice(invoice)}
+                    style={{ 
+                      padding: '1rem', 
+                      borderRadius: '0.75rem', 
+                      cursor: 'pointer', 
+                      transition: 'all 0.2s',
+                      backgroundColor: selectedInvoice && selectedInvoice.backendId === invoice.backendId ? '#EFF6FF' : '#F9FAFB',
+                      border: selectedInvoice && selectedInvoice.backendId === invoice.backendId ? '2px solid #BFDBFE' : '1px solid #E5E7EB',
+                    }}
+                  >
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <div>
+                        <h3 style={{ fontWeight: '500', color: '#111827' }}>{invoice.id}</h3>
+                        <p style={{ fontSize: '0.875rem', color: '#4B5563' }}>{invoice.supplierName}</p>
+                      </div>
+                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
+                        <span style={{ fontWeight: '600' }}>{formatCurrency(invoice.amount)}</span>
+                        <div style={{ 
+                          fontSize: '0.75rem', 
+                          display: 'flex', 
+                          alignItems: 'center', 
+                          gap: '0.25rem', 
+                          padding: '0.25rem 0.5rem', 
+                          borderRadius: '9999px',
+                          ...getStatusStyle(invoice.status)
+                        }}>
+                          {getStatusIcon(invoice.status)}
+                          <span>{getStatusText(invoice.status)}</span>
                         </div>
                       </div>
                     </div>
-                  ))}
-                </div>
-              )}
-            </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
           
-          {/* Invoice Detail - takes 2/3 width on large screens */}
-          <div className="lg:col-span-2">
+          {/* Invoice Detail */}
+          <div>
             {selectedInvoice ? (
-              <div className="bg-white rounded-2xl shadow-lg border border-gray-100">
+              <div style={{ 
+                backgroundColor: 'white', 
+                borderRadius: '1rem', 
+                boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)', 
+                border: '1px solid #F3F4F6' 
+              }}>
                 {/* Invoice Header */}
-                <div className="p-6 border-b border-gray-200">
-                  <div className="flex justify-between items-center">
+                <div style={{ padding: '1.5rem', borderBottom: '1px solid #E5E7EB' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <div>
-                      <h2 className="text-2xl font-bold text-gray-800">{selectedInvoice.id}</h2>
-                      <div className="flex items-center mt-1 text-sm text-gray-600">
-                        <Calendar className="w-4 h-4 mr-1" />
+                      <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#1F2937' }}>{selectedInvoice.id}</h2>
+                      <div style={{ display: 'flex', alignItems: 'center', marginTop: '0.25rem', fontSize: '0.875rem', color: '#4B5563' }}>
+                        <Calendar style={{ width: '1rem', height: '1rem', marginRight: '0.25rem' }} />
                         <span>Issued: {selectedInvoice.issueDate}</span>
                       </div>
                     </div>
-                    <div className={`px-3 py-2 rounded-lg flex items-center gap-1 ${getStatusColor(selectedInvoice.status)}`}>
+                    <div style={{ 
+                      padding: '0.5rem 0.75rem', 
+                      borderRadius: '0.5rem', 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      gap: '0.25rem',
+                      ...getStatusStyle(selectedInvoice.status)
+                    }}>
                       {getStatusIcon(selectedInvoice.status)}
-                      <span className="font-medium">{getStatusText(selectedInvoice.status)}</span>
+                      <span style={{ fontWeight: '500' }}>{getStatusText(selectedInvoice.status)}</span>
                     </div>
                   </div>
                 </div>
                 
                 {/* Invoice Actions */}
-                <div className="p-4 bg-gray-50 flex flex-wrap gap-2 justify-end">
+                <div style={{ 
+                  padding: '1rem', 
+                  backgroundColor: '#F9FAFB', 
+                  display: 'flex', 
+                  flexWrap: 'wrap', 
+                  gap: '0.5rem',
+                  justifyContent: 'flex-end' 
+                }}>
                   {selectedInvoice.status !== 'paid' && (
                     <button 
                       onClick={() => markAsPaid(selectedInvoice.backendId)}
-                      className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2"
+                      style={{ 
+                        backgroundColor: '#059669', 
+                        color: 'white', 
+                        padding: '0.5rem 1rem', 
+                        borderRadius: '0.5rem', 
+                        display: 'flex', 
+                        alignItems: 'center', 
+                        gap: '0.5rem',
+                        cursor: 'pointer',
+                        border: 'none',
+                        transition: 'background-color 0.2s'
+                      }}
+                      onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#047857'}
+                      onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#059669'}
                     >
-                      <CheckCircle className="w-4 h-4" />
+                      <CheckCircle style={{ width: '1rem', height: '1rem' }} />
                       Mark as Paid
                     </button>
                   )}
-                  <button className="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors flex items-center gap-2">
-                    <Download className="w-4 h-4" />
+                  <button style={{ 
+                    backgroundColor: '#E5E7EB', 
+                    color: '#1F2937', 
+                    padding: '0.5rem 1rem', 
+                    borderRadius: '0.5rem', 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    gap: '0.5rem',
+                    cursor: 'pointer',
+                    border: 'none',
+                    transition: 'background-color 0.2s'
+                  }}
+                  onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#D1D5DB'}
+                  onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#E5E7EB'}>
+                    <Download style={{ width: '1rem', height: '1rem' }} />
                     Download
                   </button>
-                  <button className="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors flex items-center gap-2">
-                    <Printer className="w-4 h-4" />
+                  <button style={{ 
+                    backgroundColor: '#E5E7EB', 
+                    color: '#1F2937', 
+                    padding: '0.5rem 1rem', 
+                    borderRadius: '0.5rem', 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    gap: '0.5rem',
+                    cursor: 'pointer',
+                    border: 'none',
+                    transition: 'background-color 0.2s'
+                  }}
+                  onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#D1D5DB'}
+                  onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#E5E7EB'}>
+                    <Printer style={{ width: '1rem', height: '1rem' }} />
                     Print
                   </button>
-                  <button className="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors flex items-center gap-2">
-                    <Mail className="w-4 h-4" />
+                  <button style={{ 
+                    backgroundColor: '#E5E7EB', 
+                    color: '#1F2937', 
+                    padding: '0.5rem 1rem', 
+                    borderRadius: '0.5rem', 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    gap: '0.5rem',
+                    cursor: 'pointer',
+                    border: 'none',
+                    transition: 'background-color 0.2s'
+                  }}
+                  onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#D1D5DB'}
+                  onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#E5E7EB'}>
+                    <Mail style={{ width: '1rem', height: '1rem' }} />
                     Email
                   </button>
                 </div>
                 
                 {/* Invoice Details */}
-                <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div style={{ 
+                  padding: '1.5rem', 
+                  display: 'grid', 
+                  gridTemplateColumns: '1fr', 
+                  gap: '1.5rem' 
+                }}>
                   <div>
-                    <h3 className="text-gray-600 font-medium mb-2 flex items-center">
-                      <Building className="w-4 h-4 mr-1" /> Supplier Details
+                    <h3 style={{ 
+                      color: '#4B5563', 
+                      fontWeight: '500', 
+                      marginBottom: '0.5rem', 
+                      display: 'flex', 
+                      alignItems: 'center' 
+                    }}>
+                      <Building style={{ width: '1rem', height: '1rem', marginRight: '0.25rem' }} /> 
+                      Supplier Details
                     </h3>
-                    <div className="bg-gray-50 p-4 rounded-lg">
-                      <p className="font-semibold text-gray-800">{selectedInvoice.supplierName}</p>
-                      <p className="text-gray-600 text-sm mt-1">{selectedInvoice.supplierAddress}</p>
+                    <div style={{ backgroundColor: '#F9FAFB', padding: '1rem', borderRadius: '0.5rem' }}>
+                      <p style={{ fontWeight: '600', color: '#1F2937' }}>{selectedInvoice.supplierName}</p>
+                      <p style={{ color: '#4B5563', fontSize: '0.875rem', marginTop: '0.25rem' }}>{selectedInvoice.supplierAddress}</p>
                     </div>
                   </div>
                   <div>
-                    <h3 className="text-gray-600 font-medium mb-2 flex items-center">
-                      <Calendar className="w-4 h-4 mr-1" /> Important Dates
+                    <h3 style={{ 
+                      color: '#4B5563', 
+                      fontWeight: '500', 
+                      marginBottom: '0.5rem',
+                      display: 'flex', 
+                      alignItems: 'center' 
+                    }}>
+                      <Calendar style={{ width: '1rem', height: '1rem', marginRight: '0.25rem' }} /> 
+                      Important Dates
                     </h3>
-                    <div className="bg-gray-50 p-4 rounded-lg">
-                      <div className="flex justify-between">
-                        <span className="text-gray-600">Issue Date:</span>
-                        <span className="font-medium">{selectedInvoice.issueDate}</span>
+                    <div style={{ backgroundColor: '#F9FAFB', padding: '1rem', borderRadius: '0.5rem' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <span style={{ color: '#4B5563' }}>Issue Date:</span>
+                        <span style={{ fontWeight: '500' }}>{selectedInvoice.issueDate}</span>
                       </div>
-                      <div className="flex justify-between mt-2">
-                        <span className="text-gray-600">Due Date:</span>
-                        <span className="font-medium">{selectedInvoice.dueDate}</span>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '0.5rem' }}>
+                        <span style={{ color: '#4B5563' }}>Due Date:</span>
+                        <span style={{ fontWeight: '500' }}>{selectedInvoice.dueDate}</span>
                       </div>
                     </div>
                   </div>
-                </div>
-                
-                {/* Invoice Description */}
-                <div className="px-6 py-4">
-                  <h3 className="text-gray-600 font-medium mb-2">Description</h3>
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <p className="text-gray-800">{selectedInvoice.description}</p>
+
+                  {/* Invoice Description */}
+                  <div>
+                    <h3 style={{ color: '#4B5563', fontWeight: '500', marginBottom: '0.5rem' }}>Description</h3>
+                    <div style={{ backgroundColor: '#F9FAFB', padding: '1rem', borderRadius: '0.5rem' }}>
+                      <p style={{ color: '#1F2937' }}>{selectedInvoice.description}</p>
+                    </div>
                   </div>
-                </div>
-                
-                {/* Invoice Items */}
-                <div className="px-6 py-4">
-                  <h3 className="text-gray-600 font-medium mb-2">Purchase Request</h3>
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <p className="text-gray-800">{selectedInvoice.purchaseRequest}</p>
+                  
+                  {/* Invoice Items */}
+                  <div>
+                    <h3 style={{ color: '#4B5563', fontWeight: '500', marginBottom: '0.5rem' }}>Purchase Request</h3>
+                    <div style={{ backgroundColor: '#F9FAFB', padding: '1rem', borderRadius: '0.5rem' }}>
+                      <p style={{ color: '#1F2937' }}>{selectedInvoice.purchaseRequest}</p>
+                    </div>
                   </div>
                 </div>
                 
                 {/* Invoice Total */}
-                <div className="p-6 border-t border-gray-200">
-                  <div className="flex justify-between items-center">
-                    <span className="text-lg text-gray-600">Total Amount:</span>
-                    <span className="text-xl font-bold text-gray-900">{formatCurrency(selectedInvoice.amount)}</span>
+                <div style={{ padding: '1.5rem', borderTop: '1px solid #E5E7EB' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span style={{ fontSize: '1.125rem', color: '#4B5563' }}>Total Amount:</span>
+                    <span style={{ fontSize: '1.25rem', fontWeight: 'bold', color: '#111827' }}>{formatCurrency(selectedInvoice.amount)}</span>
                   </div>
                   
                   {selectedInvoice.depositPaid > 0 && (
                     <>
-                      <div className="flex justify-between items-center mt-2">
-                        <span className="text-gray-600">Deposit Paid:</span>
-                        <span className="font-medium text-green-600">{formatCurrency(selectedInvoice.depositPaid)}</span>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '0.5rem' }}>
+                        <span style={{ color: '#4B5563' }}>Deposit Paid:</span>
+                        <span style={{ fontWeight: '500', color: '#059669' }}>{formatCurrency(selectedInvoice.depositPaid)}</span>
                       </div>
-                      <div className="flex justify-between items-center mt-2 pt-2 border-t border-gray-200">
-                        <span className="text-gray-600">Balance Due:</span>
-                        <span className="font-bold text-red-600">{formatCurrency(selectedInvoice.amount - selectedInvoice.depositPaid)}</span>
+                      <div style={{ 
+                        display: 'flex', 
+                        justifyContent: 'space-between', 
+                        alignItems: 'center', 
+                        marginTop: '0.5rem', 
+                        paddingTop: '0.5rem', 
+                        borderTop: '1px solid #E5E7EB' 
+                      }}>
+                        <span style={{ color: '#4B5563' }}>Balance Due:</span>
+                        <span style={{ fontWeight: 'bold', color: '#DC2626' }}>{formatCurrency(selectedInvoice.amount - selectedInvoice.depositPaid)}</span>
                       </div>
                     </>
                   )}
                 </div>
               </div>
             ) : (
-              <div className="bg-white rounded-2xl shadow-lg p-12 border border-gray-100 flex flex-col items-center justify-center">
-                <FileText className="w-16 h-16 text-gray-300 mb-4" />
-                <h3 className="text-xl font-medium text-gray-600 mb-2">No Invoice Selected</h3>
-                <p className="text-gray-500 text-center">Select an invoice from the list to view its details</p>
+              <div style={{ 
+                backgroundColor: 'white', 
+                borderRadius: '1rem', 
+                boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)', 
+                padding: '3rem', 
+                border: '1px solid #F3F4F6',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}>
+                <FileText style={{ width: '4rem', height: '4rem', color: '#D1D5DB', marginBottom: '1rem' }} />
+                <h3 style={{ fontSize: '1.25rem', fontWeight: '500', color: '#4B5563', marginBottom: '0.5rem' }}>No Invoice Selected</h3>
+                <p style={{ color: '#6B7280', textAlign: 'center' }}>Select an invoice from the list to view its details</p>
               </div>
             )}
           </div>
