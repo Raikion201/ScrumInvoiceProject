@@ -2,7 +2,7 @@ import axios from 'axios'
 
 // tao mot instance cua axios voi cau hinh mac dinh
 const api = axios.create({
-  baseURL: 'http://localhost:8080', // Thay thế bằng URL API của bạn
+  baseURL: 'http://localhost:8080/api', // Thay thế bằng URL API của bạn
   headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json',
