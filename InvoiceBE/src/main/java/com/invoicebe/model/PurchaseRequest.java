@@ -15,6 +15,8 @@ import lombok.Builder;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonIgnore; // <-- Import this!
+
 @Entity
 @Table(name = "purchase_requests")
 @Data
@@ -22,7 +24,6 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Builder
 public class PurchaseRequest {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -55,7 +56,7 @@ public class PurchaseRequest {
     private LocalDate dueDate;
 
     @NotBlank(message = "Status cannot be empty")
-    @Pattern(regexp = "PENDING|DELIVERED|CONVERTED_TO_INVOICE", message = "Status must be 'PENDING', 'DELIVERED', or 'CONVERTED_TO_INVOICE'") // Added new status
+    @Pattern(regexp = "PENDING|DELIVERED|CONVERTED_TO_INVOICE", message = "Status must be 'PENDING', 'DELIVERED', or 'CONVERTED_TO_INVOICE'")
     @Column(nullable = false)
     private String status;
 
@@ -72,10 +73,7 @@ public class PurchaseRequest {
     private String invoiceNumber;
 
     // --- NEW RELATIONSHIP MAPPING ---
-    // A PurchaseRequest can be linked to ONE Invoice
     @OneToOne(mappedBy = "purchaseRequest", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    // 'mappedBy' indicates that the 'purchaseRequest' field in the Invoice entity is the owner of the relationship.
-    // 'cascade = CascadeType.ALL' means if you delete a PurchaseRequest, its associated Invoice will also be deleted.
-    // 'fetch = FetchType.LAZY' means the Invoice data won't be loaded until explicitly accessed.
+    @JsonIgnore // <-- Add this annotation!
     private Invoice invoice; // The Invoice object linked to this PurchaseRequest
 }
